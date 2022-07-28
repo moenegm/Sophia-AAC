@@ -1,0 +1,72 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+
+/public/assets
+.byebug_history
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+.env
+
+.DS_Store
+
+config/database.yml
+config/config.yml
+config/session_secret
+config/gmaps_api_key.yml
+config/translation.yml
+
+.bundle
+.sass-cache/
+capybara*
+
+node_modules
+coverage/
+.idea/
+*.sock
+.vagrant
+.env
+.session.vim
+
+# React on Rails
+npm-debug.log*
+node_modules
+client/node_modules
+
+# Generated js bundles
+/app/assets/webpack/*
+
+# Generated i18n-js bundles
+/app/assets/javascripts/i18n/*
+/client/app/i18n/*
+!/client/app/i18n/.keep
+/client/app/routes/*
+!/client/app/routes/.keep
+
+# Generated assets
+/public/webpack/*
+
+client/.vimrc
+storage/
