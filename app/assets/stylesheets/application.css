@@ -17,7 +17,11 @@
     width: 50px;
 }
 .request-pic{
-   width: 196px; 
+   width: 200px; 
+   border: 2px solid grey;
+}
+.audioButton{
+   text-decoration:none !important;
 }
 /* Style the tab */
 .tab {
