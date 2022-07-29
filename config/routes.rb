@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :posts
+  get "all_posts", to: 'posts#all_posts'
   get "activities", to: 'posts#activities'
   get "crafts", to: 'posts#crafts'
   get "drinks", to: 'posts#drinks'

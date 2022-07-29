@@ -39,5 +39,22 @@
       </div>
     </div>
   </div>
+  <div class="row text-center pt-3">
+    <div class="col-12 justify-content-center">
+      <div class="card">
+        <div class="card-header">
+          Quick Buttons
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><%= link_to "New Request", new_post_path, style:"color: blue;", class:"nav-link"  %></li>
+          <li class="list-group-item"><%= link_to "Edit Requests",all_posts_path, style:"color: blue;", class:"nav-link"  %></li>
+          <li class="list-group-item"><%= link_to "Log out", destroy_user_session_path, style:"color: red;", class:"nav-link" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
-<%= link_to "New Request", new_post_path %>
+
+
+
+

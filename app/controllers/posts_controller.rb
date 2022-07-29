@@ -6,14 +6,42 @@ class PostsController < ApplicationController
     @posts = Post.all
   end
 
+  def all_posts
+    @posts = Post.all
+  end
+
   # GET /posts/1 or /posts/1.json
   def show
     @posts = Post.all
   end
 
+  def activities
+    @postsActivitiesAba = Post.where(category: "Activities", location:"ABA")
+    @postsActivitiesHome = Post.where(category: "Activities", location:"Home")
+  end
+  def crafts
+    @postsCraftsAba = Post.where(category: "Crafts", location:"ABA")
+    @postsCraftsHome = Post.where(category: "Crafts", location:"Home")
+  end
+  def drinks
+    @postsDrinksAba = Post.where(category: "Drinks", location:"ABA")
+    @postsDrinksHome = Post.where(category: "Drinks", location:"Home")
+  end
+  def feelings
+    @postsFeelingsAba = Post.where(category: "Feelings", location:"ABA")
+    @postsFeelingsHome = Post.where(category: "Feelings", location:"Home")
+  end
   def food
     @postsFoodAba = Post.where(category: "Food", location:"ABA")
     @postsFoodHome = Post.where(category: "Food", location:"Home")
+  end
+  def people
+    @postsPeopleAba = Post.where(category: "People", location:"ABA")
+    @postsPeopleHome = Post.where(category: "People", location:"Home")
+  end
+  def places
+    @postsPlacesAba = Post.where(category: "Places", location:"ABA")
+    @postsPlacesHome = Post.where(category: "Places", location:"Home")
   end
 
   # GET /posts/new

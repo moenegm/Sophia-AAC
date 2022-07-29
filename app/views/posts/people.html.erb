@@ -4,94 +4,33 @@
 </div>
 
 <div id="ABA" class="tabcontent">
-    <div class="container">
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-
-                <%= audio_tag("activities/art-center.m4a", class: "audio-play", id: "art-center") %>
-                <a class="p-1 audioButton" onclick="play('art-center')"> <%= image_tag('activities/art-center.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/ball.m4a", class: "audio-play", id: "ball") %>
-                <a class="p-1 audioButton" onclick="play('ball')"> <%= image_tag('activities/ball.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/potty.m4a", class: "audio-play", id: "potty") %>
-                <a class="p-1 audioButton" onclick="play('potty')"> <%= image_tag('activities/potty.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/cars.m4a", class: "audio-play", id: "cars") %>
-                <a class="p-1 audioButton" onclick="play('cars')"> <%= image_tag('activities/cars.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/dinosaur-snail-thing.m4a", class: "audio-play", id: "dinosaur") %>
-                <a class="p-1 audioButton" onclick="play('dinosaur')"> <%= image_tag('activities/dinosaur-snail-thing.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/dolls.m4a", class: "audio-play", id: "dolls") %>
-                <a class="p-1 audioButton" onclick="play('dolls')"> <%= image_tag('activities/dolls.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/kitchen.m4a", class: "audio-play", id: "kitchen") %>
-                <a class="p-1 audioButton" onclick="play('kitchen')"> <%= image_tag('activities/kitchen.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/lunch.m4a", class: "audio-play", id: "lunch") %>
-                <a class="p-1 audioButton" onclick="play('lunch')"> <%= image_tag('activities/lunch.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/phone.m4a", class: "audio-play", id: "phone") %>
-                <a class="p-1 audioButton" onclick="play('phone')"> <%= image_tag('activities/phone.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/playground.m4a", class: "audio-play", id: "playground") %>
-                <a class="p-1 audioButton" onclick="play('playground')"> <%= image_tag('activities/monkey-bars.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/rolling-chairs.m4a", class: "audio-play", id: "rolling-chairs") %>
-                <a class="p-1 audioButton" onclick="play('rolling-chairs')"> <%= image_tag('activities/rolling-chair.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/story-time.m4a", class: "audio-play", id: "story-time") %>
-                <a class="p-1 audioButton" onclick="play('story-time')"> <%= image_tag('activities/story-time.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
+  <div class="container">
+    <div class="row">
+        <% @postsPeopleAba.each do |post|%>
+            <div class="col">
+                <% title = post.title %>
+                <div class="col">
+                    <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
+                    <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+                </div>
+            </div>
+        <% end %>
     </div>
+  </div>
 </div>
 
 <div id="Home" class="tabcontent">
-    <div class="container">
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/bike.m4a", class: "audio-play", id: "bike") %>
-                <a class="p-1 audioButton" onclick="play('bike')"> <%= image_tag('activities/bike.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/drawing.m4a", class: "audio-play", id: "drawing") %>
-                <a class="p-1 audioButton" onclick="play('drawing')"> <%= image_tag('activities/drawing.png', class:"request-pic") %> </a>
-                <%= audio_tag("activities/hammock.m4a", class: "audio-play", id: "hammock") %>
-                <a class="p-1 audioButton" onclick="play('hammock')"> <%= image_tag('activities/hammock.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/ipad.m4a", class: "audio-play", id: "ipad") %>
-                <a class="p-1 audioButton" onclick="play('ipad')"> <%= image_tag('activities/ipad.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/lunch.m4a", class: "audio-play", id: "lunch") %>
-                <a class="p-1 audioButton" onclick="play('lunch')"> <%= image_tag('activities/lunch.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/pool.m4a", class: "audio-play", id: "pool") %>
-                <a class="p-1 audioButton" onclick="play('pool')"> <%= image_tag('activities/pool.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/potty.m4a", class: "audio-play", id: "potty") %>
-                <a class="p-1 audioButton" onclick="play('potty')"> <%= image_tag('activities/potty.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/sand-pit.m4a", class: "audio-play", id: "sand-pit") %>
-                <a class="p-1 audioButton" onclick="play('sand-pit')"> <%= image_tag('activities/sand-pit.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("activities/story-time.m4a", class: "audio-play", id: "story-time") %>
-                <a class="p-1 audioButton" onclick="play('story-time')"> <%= image_tag('activities/story-time.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("activities/swing.m4a", class: "audio-play", id: "swing") %>
-                <a class="p-1 audioButton" onclick="play('swing')"> <%= image_tag('activities/swing.webp', class:"request-pic") %> </a>
-                <%= audio_tag("activities/trampoline.m4a", class: "audio-play", id: "trampoline") %>
-                <a class="p-1 audioButton" onclick="play('trampoline')"> <%= image_tag('activities/trampoline.webp', class:"request-pic") %> </a>
-                <%= audio_tag("activities/tv.m4a", class: "audio-play", id: "tv") %>
-                <a class="p-1 audioButton" onclick="play('tv')"> <%= image_tag('activities/tv.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
+  <div class="container">
+    <div class="row">
+        <% @postsPeopleHome.each do |post|%>
+            <% title = post.title %>
+            <div class="col">
+                <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
+                <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+            </div>
+        <% end %>
     </div>
+  </div>
 </div>
 
 <script>

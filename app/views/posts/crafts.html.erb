@@ -4,95 +4,33 @@
 </div>
 
 <div id="ABA" class="tabcontent">
-    <div class="container">
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-
-                <%= audio_tag("crafts/brush.m4a", class: "audio-play", id: "brush") %>
-                <a class="p-1 audioButton" onclick="play('brush')"> <%= image_tag('crafts/brush.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/coffee-filter.m4a", class: "audio-play", id: "coffee-filter") %>
-                <a class="p-1 audioButton" onclick="play('coffee-filter')"> <%= image_tag('crafts/coffee-filter.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/colored-paper.m4a", class: "audio-play", id: "colored-paper") %>
-                <a class="p-1 audioButton" onclick="play('colored-paper')"> <%= image_tag('crafts/colored-paper.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("crafts/crayons.m4a", class: "audio-play", id: "crayons") %>
-                <a class="p-1 audioButton" onclick="play('crayons')"> <%= image_tag('crafts/crayons.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/glue.m4a", class: "audio-play", id: "glue") %>
-                <a class="p-1 audioButton" onclick="play('glue')"> <%= image_tag('crafts/glue.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/markers.m4a", class: "audio-play", id: "markers") %>
-                <a class="p-1 audioButton" onclick="play('markers')"> <%= image_tag('crafts/markers.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("crafts/colored-pencil.m4a", class: "audio-play", id: "olored-pencil") %>
-                <a class="p-1 audioButton" onclick="play('olored-pencil')"> <%= image_tag('crafts/colored-pencil.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/paint.m4a", class: "audio-play", id: "paint") %>
-                <a class="p-1 audioButton" onclick="play('paint')"> <%= image_tag('crafts/paint.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/pen.m4a", class: "audio-play", id: "pen") %>
-                <a class="p-1 audioButton" onclick="play('pen')"> <%= image_tag('crafts/pen.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("crafts/pencil.m4a", class: "audio-play", id: "pencil") %>
-                <a class="p-1 audioButton" onclick="play('pencil')"> <%= image_tag('crafts/pencil.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/water.m4a", class: "audio-play", id: "water") %>
-                <a class="p-1 audioButton" onclick="play('water')"> <%= image_tag('crafts/water.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/white-paper.m4a", class: "audio-play", id: "white-paper") %>
-                <a class="p-1 audioButton" onclick="play('white-paper')"> <%= image_tag('crafts/white-paper.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
+  <div class="container">
+    <div class="row">
+        <% @postsCraftsAba.each do |post|%>
+            <div class="col">
+                <% title = post.title %>
+                <div class="col">
+                    <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
+                    <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+                </div>
+            </div>
+        <% end %>
     </div>
+  </div>
 </div>
 
 <div id="Home" class="tabcontent">
-    <div class="container">
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-
-                <%= audio_tag("crafts/brush.m4a", class: "audio-play", id: "brush") %>
-                <a class="p-1 audioButton" onclick="play('brush')"> <%= image_tag('crafts/brush.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/coffee-filter.m4a", class: "audio-play", id: "coffee-filter") %>
-                <a class="p-1 audioButton" onclick="play('coffee-filter')"> <%= image_tag('crafts/coffee-filter.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/colored-paper.m4a", class: "audio-play", id: "colored-paper") %>
-                <a class="p-1 audioButton" onclick="play('colored-paper')"> <%= image_tag('crafts/colored-paper.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("crafts/crayons.m4a", class: "audio-play", id: "crayons") %>
-                <a class="p-1 audioButton" onclick="play('crayons')"> <%= image_tag('crafts/crayons.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/glue.m4a", class: "audio-play", id: "glue") %>
-                <a class="p-1 audioButton" onclick="play('glue')"> <%= image_tag('crafts/glue.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/markers.m4a", class: "audio-play", id: "markers") %>
-                <a class="p-1 audioButton" onclick="play('markers')"> <%= image_tag('crafts/markers.webp', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("crafts/colored-pencil.m4a", class: "audio-play", id: "olored-pencil") %>
-                <a class="p-1 audioButton" onclick="play('olored-pencil')"> <%= image_tag('crafts/colored-pencil.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/paint.m4a", class: "audio-play", id: "paint") %>
-                <a class="p-1 audioButton" onclick="play('paint')"> <%= image_tag('crafts/paint.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/pen.m4a", class: "audio-play", id: "pen") %>
-                <a class="p-1 audioButton" onclick="play('pen')"> <%= image_tag('crafts/pen.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
-        <div class="row text-center mb-2">
-            <div class="col justify-content-center">
-                <%= audio_tag("crafts/pencil.m4a", class: "audio-play", id: "pencil") %>
-                <a class="p-1 audioButton" onclick="play('pencil')"> <%= image_tag('crafts/pencil.webp', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/water.m4a", class: "audio-play", id: "water") %>
-                <a class="p-1 audioButton" onclick="play('water')"> <%= image_tag('crafts/water.jpg', class:"request-pic") %> </a>
-                <%= audio_tag("crafts/white-paper.m4a", class: "audio-play", id: "white-paper") %>
-                <a class="p-1 audioButton" onclick="play('white-paper')"> <%= image_tag('crafts/white-paper.jpg', class:"request-pic") %> </a>
-            </div>    
-        </div>
+  <div class="container">
+    <div class="row">
+        <% @postsCraftsHome.each do |post|%>
+            <% title = post.title %>
+            <div class="col">
+                <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
+                <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+            </div>
+        <% end %>
     </div>
+  </div>
 </div>
 
 <script>
