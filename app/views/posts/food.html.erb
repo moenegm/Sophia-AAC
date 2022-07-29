@@ -1,0 +1,40 @@
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'ABA')">ABA</button>
+  <button class="tablinks" onclick="openCity(event, 'Home')">Home</button>
+</div>
+
+<div id="ABA" class="tabcontent">
+    <div class="container">
+        <div class="row-cols-3">
+            <div class="col">
+                <%= audio_tag("audio.m4a", class: "audio-play") %>
+                <button type="button" class="btn btn-primary audioButton">Primary</button>
+
+                <%= audio_tag("audio.m4a", class: "audio-play") %>
+                <button type="button" class="audioButton"> <%= image_tag('food/grapes.png', class:"request-pic") %> </button>
+                <button type="button" class="audioButton">blah </button>
+            </div>    
+        </div>
+    </div>
+</div>
+
+<div id="Home" class="tabcontent">
+  <h3>Home</h3>
+  <p>Paris is the capital of France.</p> 
+</div>
+
+<script>
+    function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    }
+</script>
