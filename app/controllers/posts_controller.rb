@@ -8,6 +8,12 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    @posts = Post.all
+  end
+
+  def food
+    @postsFoodAba = Post.where(category: "Food", location:"ABA")
+    @postsFoodHome = Post.where(category: "Food", location:"Home")
   end
 
   # GET /posts/new
@@ -65,6 +71,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title)
+      params.require(:post).permit(:title, :image, :category, :location, :sound)
     end
 end

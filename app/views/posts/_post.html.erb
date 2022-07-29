@@ -1,7 +1,23 @@
 <div id="<%= dom_id post %>">
-  <p>
-    <strong>Title:</strong>
-    <%= post.title %>
-  </p>
-
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1><%= post.category %></h1>
+      </div>
+      <div class="col">
+        <h1><%= post.location %></h1>
+      </div>
+      <div class="col">
+        <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "grapes") %>
+        <a class="p-1 audioButton" onclick="play('grapes')"> <%= image_tag(post.image, class:"request-pic") %> </a>
+      </div>
+    </div>
+  </div>
 </div>
+<script>
+    function play(element){
+        var audio = document.getElementById(element);
+        audio.currentTime = 0;
+        audio.play();
+    }
+</script>
