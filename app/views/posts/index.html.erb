@@ -1,12 +1,43 @@
-<h1>Posts</h1>
-
-<div id="posts">
-  <% @posts.each do |post| %>
-    <%= render post %>
-    <p>
-      <%= link_to "Show this post", post %>
-    </p>
-  <% end %>
+<div class="container pt-5">
+  <div class="row text-center">
+    <div class="col justify-content-center">
+      <%= image_tag('sophia-home', style:"width:400px;")%>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col-12 justify-content-center">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Sophia's AAC</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Phase I</h6>
+          <p class="card-text">This site was intended for Sophia, please choose a category from above, you will then choose a tab "ABA" or "HOME". Future Phases will include more features and will allow Sophia to use the app independently, if you think of any features not included below please reach out to mohamed at mr.negm90@gmail.com to recomend them. Thank You!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center pt-3">
+    <div class="col justify-content-center">
+      <div class="card" style="width: 18rem;">
+        <div class="card-header">
+          Phase 2
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">I Want</li>
+          <li class="list-group-item">Ability for user to add requests</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col justify-content-center">
+      <div class="card" style="width: 18rem;">
+        <div class="card-header">
+          Phase 3
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Sophia Drives</li>
+          <li class="list-group-item">Menue Items are pictures in the home page</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
-
-<%= link_to "New post", new_post_path %>
+<%#= link_to "New post", new_post_path %>
