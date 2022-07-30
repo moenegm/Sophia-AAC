@@ -5,9 +5,9 @@
 
 <div id="ABA" class="tabcontent">
   <div class="container">
-    <div class="row">
+    <div class="row row-cols-3">
         <% @postsPeopleAba.each do |post|%>
-            <div class="col">
+            <div class="col mb-3">
                 <% title = post.title %>
                 <div class="col">
                     <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
@@ -21,10 +21,10 @@
 
 <div id="Home" class="tabcontent">
   <div class="container">
-    <div class="row">
+    <div class="row row-cols-3">
         <% @postsPeopleHome.each do |post|%>
             <% title = post.title %>
-            <div class="col">
+            <div class="col mb-3">
                 <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
                 <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
             </div>

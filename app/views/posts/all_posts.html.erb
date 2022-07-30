@@ -1,7 +1,7 @@
 <div class="container pt-3">
-    <div class="row">
+    <div class="row row-cols-3">
         <% @posts.each do |post| %>
-            <div class="col post-card">
+            <div class="col post-card mb-3">
                 <%= link_to post, :action => 'go' do %>
                     <div class="card">
                         <%= image_tag(post.image, class:"mb-2 card-img-top") %>
