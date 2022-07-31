@@ -1,4 +1,15 @@
 <div class="container pt-5">
+
+  <% if user_signed_in? %>
+    <div class="row">
+      <% @posts.each do |post| %>
+        <div class="col">
+          <%= post.title %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="row text-center">
     <div class="col justify-content-center">
       <%= image_tag('sophia-home.png', style:"width:400px;")%>
