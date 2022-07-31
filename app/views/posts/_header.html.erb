@@ -1,7 +1,6 @@
 <nav class="navbar" style="background-color:#a74ef5;">
     <div class="container ">
         <% if user_signed_in? %>
-
             <ul class="navbar-nav me-auto mb-2">    
                 <li class="nav-item">
                     <%= link_to image_tag('Sophia.png', :class =>"sophia nav-link" ), root_path %>
@@ -43,15 +42,6 @@
                     <%= link_to "Places", places_path, style:"color: #ffffff;", class:"nav-link" %>
                 </li> 
             </ul>
-
-            <ul class="navbar-nav justify-content-end me-auto mb-2">    
-                <li class="nav-item">
-                    <%= link_to "Log out", destroy_user_session_path, style:"color: black;", class:"nav-link" %>
-                </li>          
-            </ul>
-
-            
-
         <% else %>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
