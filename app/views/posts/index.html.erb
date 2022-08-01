@@ -21,8 +21,13 @@
                   <div class="col mb-3">
                       <% title = category.category %>
                       <div class="col">
-                          <%= audio_tag(polymorphic_path(category.sound), class: "audio-play", id: "#{title}") %>
-                          <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(category.image, class:"request-pic") %> </a>
+                        <div class="card">
+                            <%= image_tag(category.image, class:"request-pic") %>
+                            <%= link_to(category.category, posts_path(:cate => category.id), onclick:"playSound(event)", data:{audio: "#{category.category}"}, class:"btn btn-primary") %>
+                            <%= audio_tag(polymorphic_path(category.sound), id: "#{category.category}") %>                       
+                        </div>
+
+
                       </div>
                   </div>
                 <% end %>              

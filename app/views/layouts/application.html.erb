@@ -44,6 +44,7 @@
     <% end %>
   </footer>
 
+  <%# JS for TABS %>
   <script>
     function openCity(evt, cityName) {
     var i, tabcontent, tablinks;
@@ -58,11 +59,29 @@
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
     }
+  </script>
 
+  <%# JS for sound on regular cards %>
+  <script>
     function play(element){
         var audio = document.getElementById(element);
         // audio.currentTime = 0;
         audio.play();
+    }
+  </script>
+
+  <%# JS for sound on redirect %>
+  <script type="text/javascript">
+    function playSound(event){
+      console.log(event);
+      console.log(event.target);
+      event.preventDefault();
+      const link = event.target;
+      const audio = document.getElementById(link.dataset.audio)
+      // you could add an event listener, instead, for "ended" event.
+      audio.onended = function() { window.location = link.href };
+      
+      audio.play();
     }
   </script>
 </html>
