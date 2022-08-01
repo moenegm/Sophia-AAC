@@ -2,21 +2,25 @@
     <% if user_signed_in? %>
         <ul class="navbar-nav me-auto mb-2 ps-4">    
             <li class="nav-item">
-                <%= link_to image_tag(current_user.avatar, :class =>"avatar nav-link" ), root_path %>
+                <% if current_user.avatar.attached?%>
+                    <%= link_to(image_tag(current_user.avatar, class:"avatar"),root_path) %>
+                <% else %>
+                    <%= link_to(image_tag('default-avatar.jpg', class:"avatar"),root_path) %>
+                <% end %>
             </li> 
         </ul>
 
-        <% if @categories.count == 0 %>
-            <ul class="navbar-nav me-auto mb-2">    
-                <li class="nav-item">
-                    <%= link_to "Create a New Category", new_category_path, style:"color: #ffffff;", class:"nav-link" %>
-                </li> 
-            </ul>
-        <% else  %>
-            <% @categories.each do |category| %>
-                <ul class="navbar-nav me-auto mb-2">    
+        <% if !@categoriez.nil? %>
+            <% @categoriez.each do |category| %>
+                <ul class="navbar-nav me-auto mb-2">   
+
                     <li class="nav-item">
-                        <%= link_to category.category, posts_path(:cate => category.id), style:"color: #ffffff;", class:"nav-link" %>
+                        <div class="card">
+                            <%= image_tag(category.image, class:"category-pic") %>
+                            <%= link_to(category.category, posts_path(:cate => category.id), onclick:"playSound(event)", data:{audio: "#{category.category}"}, class:"btn btn-primary") %>
+                            <%= audio_tag(polymorphic_path(category.sound), id: "#{category.category}") %>                       
+                        </div>
+
                     </li> 
                 </ul>
             <% end %>
@@ -30,15 +34,16 @@
     <% end %>
 </nav>
 
-<script>
-    $(function(){
-        var current = location.pathname;
-        $('.navbar-nav li a').each(function(){
-            var $this = $(this);
-            // if the current path is like this link, make it active
-            if($this.attr('href').indexOf(current) !== -1){
-                $this.addClass('active');
-            }
-        })
-    })
+<script type="text/javascript">
+  function playSound(event){
+    console.log(event);
+    console.log(event.target);
+    event.preventDefault();
+    const link = event.target;
+    const audio = document.getElementById(link.dataset.audio)
+    // you could add an event listener, instead, for "ended" event.
+    audio.onended = function() { window.location = link.href };
+    
+    audio.play();
+  }
 </script>

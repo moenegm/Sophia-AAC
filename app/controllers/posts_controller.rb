@@ -3,11 +3,13 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
+    @users = User.find_by_sql('Select * from users')
+
     if user_signed_in?
-      @categories = Category.where(user_id: current_user.id)
-      cate = params[:cate]
-      if !cate.nil?
-        @posts = Post.where(category_id: cate, user_id: current_user.id)
+      @categoriez = Category.where(user_id: current_user.id)
+      @cate = params[:cate]
+      if !@cate.nil?
+        @posts = Post.where(category_id: @cate, user_id: current_user.id)
       else
         @posts = Post.where(user_id: current_user.id)
       end
@@ -108,6 +110,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :image, :category_id, :location, :sound)
+      params.require(:post).permit(:title, :image, :category_id, :Category, :location, :sound)
     end
 end

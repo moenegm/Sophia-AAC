@@ -3,7 +3,11 @@ class CategoriesController < ApplicationController
 
   # GET /categories or /categories.json
   def index
-    @categories = Category.all
+
+    if user_signed_in?
+      @categories = Category.where(user_id: current_user.id)
+      @categoriez = Category.where(user_id: current_user.id)
+    end
   end
 
   # GET /categories/1 or /categories/1.json
@@ -38,7 +42,7 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update(category_params)
-        format.html { redirect_to category_url(@category), notice: "Category was successfully updated." }
+        format.html { redirect_to action: "index", notice: "Category was successfully updated." }
         format.json { render :show, status: :ok, location: @category }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -65,6 +69,6 @@ class CategoriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def category_params
-      params.require(:category).permit(:category)
+      params.require(:category).permit(:category, :image, :sound)
     end
 end

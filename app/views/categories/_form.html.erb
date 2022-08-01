@@ -12,11 +12,19 @@
     </div>
   <% end %>
 
-  <div class="row">
-    <div class="col-6 mb-3 pt-4">
-      <%= form.text_field :category, class:"form-control", placeholder:"Create a new Category" %>
+  <div class="card">
+    <div class="card-header">
+      New category
     </div>
-    <div class="col-6 mb-3 pt-4">
+    <div class="card-body">
+      <%= form.text_field :category, class:"form-control mb-3", placeholder:"Create a new Category" %>
+      <label class="form-label">Category Photo</label>
+      <%= form.file_field :image, class:"form-control mb-2"%>
+      <hr class="border border-primary border-3 opacity-75">
+      <label class="form-label">Category Sound</label>
+      <%= form.file_field :sound, class:"form-control mb-2"%>
+    </div>
+    <div class="card-footer text-muted">
       <%= form.submit class:"btn btn-primary" %>
     </div>
   </div>

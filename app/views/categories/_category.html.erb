@@ -1,7 +1,11 @@
-<div id="<%= dom_id category %>">
-  <p>
-    <strong>Category:</strong>
-    <%= category.category %>
-  </p>
-
+<div class="card" id="<%= dom_id category %>">
+  <div class="card-header">
+    <p>
+      <strong>Category:</strong>
+      <%= category.category %>
+    </p>
+  </div>
+  <div class="card-body">
+    <%= image_tag category.image, style:"width: 300px;" %>
+  </div>
 </div>

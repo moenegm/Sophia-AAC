@@ -16,8 +16,9 @@
         <%= form.text_field :title, class:"form-control", placeholder:"Request Title" %>
       </div>
       <div class="mb-3">
-        <%= form.select(:category_id, [['Request Category', nil],Category.all.map{|c| c.category}], {}, { :class => 'form-select' }) %>
-        
+        <% options = Category.where(user_id: current_user.id).map{|c| [c.category, c.id]} %>
+        <% options.unshift(['Request Category', nil])%>
+        <%= form.select(:category_id, options, {}, { :class => 'form-select' }) %>
         <%#= form.select(:category, [['Request Category', nil], 'Activities', 'Crafts', 'Drinks', 'Feelings', 'Food', 'People', 'Places'], {}, { :class => 'form-select' }) %>
       </div>
       <div class="mb-3">

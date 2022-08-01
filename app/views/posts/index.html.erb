@@ -1,49 +1,68 @@
 <div class="container pt-5">
-
   <% if user_signed_in? %>
-    <div class="row">
-      <% @posts.each do |post| %>
-        <div class="col">
-          <%= post.title %>
-        </div>
-      <% end %>
+    <div class="row text-center">
+      <div class="col justify-content-center">
+        <% if current_page?(root_path)%>
+          <div class="row mb-3">
+            <% if @categoriez.count == 0 %>
+              <%= link_to "Create a New Category", new_category_path, class:"btn btn-danger" %>
+            <% end  %>          
+          </div>
+          <% if current_user.avatar.attached?%>
+            <%= image_tag(current_user.avatar, class:"large-avatar") %>
+          <% else %>
+            <%= image_tag('default-avatar.jpg', class:"large-avatar") %>
+          <% end %>
+        <% else %>
+          <div class="row row-cols-4">
+            <% @posts.each do |post| %>
+              <div class="col mb-3">
+                  <% title = post.title %>
+                  <div class="col">
+                      <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
+                      <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+                  </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     </div>
-  <% end %>
-
-  <div class="row text-center">
-    <div class="col justify-content-center">
-      <%= image_tag('sophia-home.png', style:"width:400px;")%>
+  <% else %>
+    <div class="row text-center">
+      <div class="col justify-content-center">
+        <%= image_tag('sophia-home.png', style:"width:400px !important;")%>
+      </div>
     </div>
-  </div>
-  <div class="row text-center">
+  <div class="row">
     <div class="col-12 justify-content-center">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Sophia's AAC</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Phase II</h6>
-          <p class="card-text">This site was intended for Sophia, please choose a category from above, you will then choose a tab "ABA" or "HOME". Future Phases will include more features and will allow Sophia to use the app independently, if you think of any features not included below please reach out to mohamed at mr.negm90@gmail.com to recommend them. Thank You!</p>
+          <h5 class="card-title text-center">Sophia's AAC</h5>
+          <h6 class="card-subtitle mb-2 text-muted text-center">Phase III</h6>
+          <p class="card-text">This site was originally intended for Sophia, I've since decided to open 
+          it up to the public so other's can benefit too. I've designed this for an iPad, it will work 
+          on other devices, but will preform best on the safari browser on an iPad.<br><br>
+          <strong>How To Use: </strong> Create one account per child, upload a profile image that will then be used as a logo/home button. 
+          you will be prompted to create categories, once you have added your categories, create your requests and link them to the categories you've 
+          already created. You will also need to upload a picture and a sound for each request. Future itterations will make it so you can record audio straight 
+          on the app, for now you will need to upload the sound sepreatly. <br><br>
+          <strong>Questions? </strong> if you have a question or if you want to leave me a tip, my email is: mr.negm90@gmail.com This app is free, cloud storage 
+          for photos, sounds, and users isn't. It would be nice if I don't go bankrupt in the process of trying to get my daughter vocal. <br><br></p>
+
+          <p class="text-center"><strong>Thank you!</strong></p>
+
+        </div>
+        <div class="card-footer text-muted">
+          <%= link_to "Create Your Account",new_user_registration_path, class:"btn btn-primary col-12" %>
         </div>
       </div>
     </div>
   </div>
-  <% if user_signed_in? %>
-    <div class="row text-center pt-3">
-      <div class="col-12 justify-content-center">
-        <div class="card">
-          <div class="card-header">
-            Quick Buttons
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><%= link_to "New Request", new_post_path, style:"color: blue;", class:"nav-link"  %></li>
-            <li class="list-group-item"><%= link_to "View/Edit All Requests",all_posts_path, style:"color: blue;", class:"nav-link"  %></li>
-            <li class="list-group-item"><%= link_to "Log out", destroy_user_session_path, style:"color: red;", class:"nav-link" %></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  <div class="text-center text-muted">
+    <p>Current User Count: <%= @users.count %></p>
+  </div>
   <% end %>
 </div>
-
-
 
 
