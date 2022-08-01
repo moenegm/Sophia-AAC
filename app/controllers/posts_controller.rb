@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+
   before_action :set_post, only: %i[ show edit update destroy ]
 
   # GET /posts or /posts.json
@@ -23,36 +24,7 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
-    @posts = Post.all
-  end
-
-  def activities
-    @postsActivitiesAba = Post.where(category: "Activities", location:"ABA")
-    @postsActivitiesHome = Post.where(category: "Activities", location:"Home")
-  end
-  def crafts
-    @postsCraftsAba = Post.where(category: "Crafts", location:"ABA")
-    @postsCraftsHome = Post.where(category: "Crafts", location:"Home")
-  end
-  def drinks
-    @postsDrinksAba = Post.where(category: "Drinks", location:"ABA")
-    @postsDrinksHome = Post.where(category: "Drinks", location:"Home")
-  end
-  def feelings
-    @postsFeelingsAba = Post.where(category: "Feelings", location:"ABA")
-    @postsFeelingsHome = Post.where(category: "Feelings", location:"Home")
-  end
-  def food
-    @postsFoodAba = Post.where(category: "Food", location:"ABA")
-    @postsFoodHome = Post.where(category: "Food", location:"Home")
-  end
-  def people
-    @postsPeopleAba = Post.where(category: "People", location:"ABA")
-    @postsPeopleHome = Post.where(category: "People", location:"Home")
-  end
-  def places
-    @postsPlacesAba = Post.where(category: "Places", location:"ABA")
-    @postsPlacesHome = Post.where(category: "Places", location:"Home")
+    @post = Post.find(params[:id])
   end
 
   # GET /posts/new
@@ -67,6 +39,9 @@ class PostsController < ApplicationController
   # POST /posts or /posts.json
   def create
     @post = Post.new(post_params.merge(user_id: current_user.id))
+    Post.text_to_speech(@post.title)
+    Post.attach_sound(@post)
+    
 
     respond_to do |format|
       if @post.save
@@ -82,6 +57,8 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
     respond_to do |format|
+      Post.text_to_speech(@post.title)
+      Post.attach_sound(@post)
       if @post.update(post_params)
         format.html { redirect_to post_url(@post), notice: "Post was successfully updated." }
         format.json { render :show, status: :ok, location: @post }

@@ -26,6 +26,8 @@ class CategoriesController < ApplicationController
   # POST /categories or /categories.json
   def create
     @category = Category.new(category_params.merge(user_id: current_user.id))
+    Category.text_to_speech(@category.category)
+    Category.attach_sound(@category)
 
     respond_to do |format|
       if @category.save
@@ -41,6 +43,8 @@ class CategoriesController < ApplicationController
   # PATCH/PUT /categories/1 or /categories/1.json
   def update
     respond_to do |format|
+    Category.text_to_speech(@category.category)
+    Category.attach_sound(@category)
       if @category.update(category_params)
         format.html { redirect_to action: "index", notice: "Category was successfully updated." }
         format.json { render :show, status: :ok, location: @category }

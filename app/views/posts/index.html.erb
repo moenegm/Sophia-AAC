@@ -35,17 +35,29 @@
 
             <% end  %>          
         <% else %>
-          <div class="row row-cols-4">
-            <% @posts.each do |post| %>
-              <div class="col mb-3">
-                  <% title = post.title %>
-                  <div class="col">
-                      <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
-                      <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
-                  </div>
-              </div>
-            <% end %>
-          </div>
+          <% if request.original_url.ends_with?("posts") %>
+            <div class="row row-cols-4">
+              <% @posts.each do |post| %>
+                <div class="col mb-3">
+                    <div class="col">
+                      <%= link_to image_tag(post.image, class:"request-pic"), post %>
+                    </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="row row-cols-4">
+              <% @posts.each do |post| %>
+                <div class="col mb-3">
+                    <% title = post.title %>
+                    <div class="col">
+                        <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
+                        <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+                    </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
