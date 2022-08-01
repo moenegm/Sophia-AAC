@@ -34,7 +34,9 @@
               <li class="list-group-item"><%= link_to "Home", root_path, style:"color:  #cc98fa !important;", class:"nav-link"  %></li>
               <li class="list-group-item"><%= link_to "New Category", new_category_path, style:"color:  #cc98fa !important;", class:"nav-link"  %></li>
               <li class="list-group-item"><%= link_to "New Request", new_post_path, style:"color:  #cc98fa !important;", class:"nav-link"  %></li>
-              <li class="list-group-item"><%= link_to "All Categories", categories_path, style:"color:  #cc98fa !important;", class:"nav-link"  %></li>
+              <li class="list-group-item"><%= link_to "View/Edit Categories", categories_path, style:"color:  #cc98fa !important;", class:"nav-link"  %></li>
+            </ul>
+            <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
               <li class="list-group-item"><%= link_to "Edit Account", edit_user_registration_path, style:"color:  #cc98fa !important;", class:"nav-link"  %></li>
               <li class="list-group-item"><%= link_to "Log out", destroy_user_session_path, style:"color: red !important;", class:"nav-link" %></li>
             </ul>
