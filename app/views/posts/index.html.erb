@@ -3,16 +3,32 @@
     <div class="row text-center">
       <div class="col justify-content-center">
         <% if current_page?(root_path)%>
-          <div class="row mb-3">
             <% if @categoriez.count == 0 %>
-              <%= link_to "Create a New Category", new_category_path, class:"btn btn-danger" %>
+              <div class="row">
+                <%= link_to "Create a New Category", new_category_path, class:"btn btn-danger mb-5" %>
+              </div>
+              <div class="row">
+                <% if current_user.avatar.attached?%>
+                  <%= image_tag(current_user.avatar, class:"large-avatar") %>
+                <% else %>
+                  <h3> Consider uploading a photo so it can be used as a homepage icon above</h3>
+                  <%= image_tag('default-avatar.jpg', class:"large-avatar") %>
+                <% end %>              
+              </div>
+            <% else %>
+              <div class="row row-cols-4">
+                <% @categoriez.each do |category| %>
+                  <div class="col mb-3">
+                      <% title = category.category %>
+                      <div class="col">
+                          <%= audio_tag(polymorphic_path(category.sound), class: "audio-play", id: "#{title}") %>
+                          <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(category.image, class:"request-pic") %> </a>
+                      </div>
+                  </div>
+                <% end %>              
+              </div>
+
             <% end  %>          
-          </div>
-          <% if current_user.avatar.attached?%>
-            <%= image_tag(current_user.avatar, class:"large-avatar") %>
-          <% else %>
-            <%= image_tag('default-avatar.jpg', class:"large-avatar") %>
-          <% end %>
         <% else %>
           <div class="row row-cols-4">
             <% @posts.each do |post| %>
