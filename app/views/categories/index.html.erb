@@ -1,14 +1,16 @@
 <h1 class="text-center">Categories</h1>
 
-<div class="row" id="categories">
+<div class="row row-cols-4" id="categories">
   <% @categories.each do |category| %>
     <div class="col text-center">
       <%= render category %>
-
-      <%= link_to "Show this category", category, class:"btn btn-primary mb-3" %>
+      <div class="card mb-3">
+        <%= link_to "Show this category", category, class:"btn btn-primary" %>
+      </div>
+      
     </div>
   <% end %>
 </div>
 
 
-<%= link_to "New category", new_category_path %>
+<%#= link_to "New category", new_category_path %>
