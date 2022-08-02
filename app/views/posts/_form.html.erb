@@ -10,33 +10,29 @@
       </ul>
     </div>
   <% end %>
-  <div class="row">
-    <div class="col-6">
-      <div class="mb-3 pt-4">
-        <%= form.text_field :title, class:"form-control", placeholder:"Request Title" %>
-      </div>
-      <div class="mb-3">
-        <% options = Category.where(user_id: current_user.id).map{|c| [c.category, c.id]} %>
-        <% options.unshift(['Request Category', nil])%>
-        <%= form.select(:category_id, options, {}, { :class => 'form-select' }) %>
-        <%#= form.select(:category, [['Request Category', nil], 'Activities', 'Crafts', 'Drinks', 'Feelings', 'Food', 'People', 'Places'], {}, { :class => 'form-select' }) %>
-      </div>
-      <div class="mb-3">
-        <%= form.select(:location, [['Request Location', nil], 'ABA', 'Home'], {}, { :class => 'form-select' }) %>
-      </div>
+  <div class="card mt-5">
+    <div class="card-header">
+      New Request
     </div>
-    <div class="col-6">
+    <div class="card-body">
+      <div class="row">
+        <div class="mb-3 col-6">
+          <%= form.text_field :title, class:"form-control", placeholder:"Request Title" %>
+        </div>
+        <div class="mb-3 col-6">
+          <% options = Category.where(user_id: current_user.id).map{|c| [c.category, c.id]} %>
+          <% options.unshift(['Request Category', nil])%>
+          <%= form.select(:category_id, options, {}, { :class => 'form-select' }) %>
+        </div>
+      </div>
       <div class="field form-group mb-3">
         <label class="form-label">Request Photo</label>
         <%= form.file_field :image, class:"form-control mb-4"%>
       </div>
-      <hr class="border border-primary border-3 opacity-75">
-
-      <div class="field form-group mb-3">
-        <%= form.label "Request Sound" %>
-        <%= form.file_field :sound, class:"form-control mb-4"%>
-      </div>
     </div>
-    <%= form.submit class:"btn btn-primary" %>
+    
+    <div class="card-footer text-muted">
+      <%= form.submit class:"btn btn-primary" %>
+    </div>
   </div>
 <% end %>

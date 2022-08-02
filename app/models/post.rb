@@ -5,8 +5,8 @@ require 'base64'
 
 class Post < ApplicationRecord
 
-    validates :title,:category_id,:location,:image, :sound, presence: true
-    validates :title, format: { with: /\A[a-zA-Z0-9-_]+\Z/, message: 'Title cannot contain whitespace or special characters' }
+    validates :title,:category_id,:image, presence: true
+    # validates :title, format: { with: /\A[a-zA-Z0-9-_]+\Z/, message: 'Title cannot contain whitespace or special characters' }
 
     belongs_to :user
     belongs_to :category
@@ -23,7 +23,7 @@ class Post < ApplicationRecord
         voice = speech({
         'key' => '6474bf093c804dd6a0fd92ed8aac4519',
         'hl' => 'en-us',
-        'v' => 'Linda',
+        'v' => 'Mary',
         'src' => "#{text}",
         'r' => '0',
         'c' => 'mp3',

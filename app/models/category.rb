@@ -1,5 +1,8 @@
 class Category < ApplicationRecord
 
+    validates :title,:category_id,:image, presence: true
+    validates :title, format: { with: /\A[a-zA-Z]+\Z/, message: 'Title cannot contain Upper and Lower Case Characters' }
+
     has_one_attached :image
     has_one_attached :sound
 
@@ -13,7 +16,7 @@ class Category < ApplicationRecord
         voice = speech({
         'key' => '6474bf093c804dd6a0fd92ed8aac4519',
         'hl' => 'en-us',
-        'v' => 'Linda',
+        'v' => 'Mary',
         'src' => "#{text}",
         'r' => '0',
         'c' => 'mp3',
