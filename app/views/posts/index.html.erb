@@ -9,7 +9,7 @@
               </div>
               <div class="row">
                 <% if current_user.avatar.attached?%>
-                  <%= image_tag(current_user.avatar, class:"large-avatar") %>
+                  <%= image_tag(square(current_user.avatar), class:"large-avatar") %>
                 <% else %>
                   <h3> Consider uploading a photo so it can be used as a homepage icon above</h3>
                   <%= image_tag('default-avatar.jpg', class:"large-avatar") %>
@@ -22,7 +22,7 @@
                       <% title = category.category %>
                       <div class="col">
                         <div class="card">
-                            <%= link_to image_tag(category.image, class:"request-pic"), posts_path(:cate => category.id), onclick:"playSound(event)", data:{audio: "#{category.category}"} %>
+                            <%= link_to image_tag(square(category.image), class:"request-pic"), posts_path(:cate => category.id), onclick:"playSound(event)", data:{audio: "#{category.category}"} %>
                             <%= audio_tag(polymorphic_path(category.sound), id: "#{category.category}")%>
                         </div>
 
@@ -39,9 +39,7 @@
               <% @posts.each do |post| %>
                 <div class="col mb-3">
                     <div class="col">
-                      <%#= link_to image_tag(post.image, class:"request-pic"), post %>
-                      <%= link_to image_tag(post.image.variant(:gravity=>"Center", resize: "300x300^", crop: "300x300+0+0"), class:"request-pic"), post %>
-                      <%#= link_to image_tag(post.image.variant(resize_to_limit: [100, 100]), class:"request-pic"), post %>
+                      <%= link_to image_tag(square(post.image), class:"request-pic"), post %>
                     </div>
                 </div>
               <% end %>
@@ -53,8 +51,15 @@
                     <% title = post.title %>
                     <div class="col">
                         <%= audio_tag(polymorphic_path(post.sound), class: "audio-play", id: "#{title}") %>
-                        <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(post.image, class:"request-pic") %> </a>
+                        <a class="p-1 audioButton" onclick=<%= "play(\"#{title}\")"%> > <%= image_tag(square(post.image), class:"request-pic") %> </a>
                     </div>
+                </div>
+              <% end %>
+              <% if @posts.count == 0 %>
+                <div class="row">
+                  <div class="col">
+                    <%= link_to "Create a New Request", new_post_path, class:"btn btn-primary"  %>
+                  </div>
                 </div>
               <% end %>
             </div>

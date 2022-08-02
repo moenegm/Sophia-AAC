@@ -7,6 +7,6 @@
   </div>
   <div class="card-body">
     <%= audio_tag(polymorphic_path(category.sound), class: "audio-play", id: "#{category.category}") %>
-    <a class="p-1 audioButton" onclick=<%= "play(\"#{category.category}\")"%> > <%= image_tag(category.image, class:"request-pic") %> </a>
+    <a class="p-1 audioButton" onclick=<%= "play(\"#{category.category}\")"%> > <%= image_tag(square(category.image), class:"request-pic") %> </a>
   </div>
 </div>

@@ -1,5 +1,7 @@
 <%= link_to "Back to categories", categories_path, class:"btn btn-secondary mb-3 mt-3" %>
-<%= render @category %>
+<div class="col-6">
+  <%= render @category %>
+</div>
 
 <div>
   <%= link_to "Edit this category", edit_category_path(@category), class:"btn btn-primary"%>

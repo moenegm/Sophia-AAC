@@ -1,5 +1,5 @@
 <div id="<%= dom_id post %>">
-  <div class="container">
+  <div class="container mt-4">
     <div class="row">
       <div class="col-6">
         <table class="table table-striped">
@@ -13,17 +13,13 @@
               <td><%= post.category.category %></td>
             </tr>
             <tr>
-              <th scope="row">Location</th>
-              <td><%= post.location %></td>
-            </tr>
-            <tr>
-              <td colspan="2"><%= audio_tag(polymorphic_path(post.sound), controls: true, class: "audio-play", id: "grapes") %></td>
+              <td colspan="3"><%= audio_tag(polymorphic_path(post.sound), controls: true, class: "audio-play", id: "grapes") %></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="col-6 justify-content-center text-center">
-        <a class="p-1 audioButton" onclick="play('grapes')"> <%= image_tag(post.image, class:"request-pic") %> </a>
+        <a class="p-1 audioButton" onclick="play('grapes')"> <%= image_tag(square(post.image), class:"request-pic") %> </a>
       </div>
     </div>
   </div>

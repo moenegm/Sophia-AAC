@@ -1,6 +1,6 @@
 <%= render @post %>
 <div class="row pt-5">
-  <div class="col-12">
+  <div class="col-12 mb-5">
      <%= link_to "Edit this post", edit_post_path(@post), class:"btn btn-primary btn-lg col-12 mb-4" %>
      <%= button_to "Destroy this post", @post, method: :delete, class:"btn btn-danger col-12" %>
   </div>
