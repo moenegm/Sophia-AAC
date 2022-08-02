@@ -39,8 +39,8 @@
               <% @posts.each do |post| %>
                 <div class="col mb-3">
                     <div class="col">
-                      <%#= link_to image_tag(post.image, class:"request-pic"), post %>
-                      <%= link_to image_tag(post.image.variant(:gravity=>"Center", resize: "300x300^", crop: "300x300+0+0")), post %>
+                      <%= link_to image_tag(post.image, class:"request-pic"), post %>
+                      <%#= link_to image_tag(post.image.variant(:gravity=>"Center", resize: "300x300^", crop: "300x300+0+0")), post %>
                     </div>
                 </div>
               <% end %>
