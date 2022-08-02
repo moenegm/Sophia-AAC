@@ -5,10 +5,26 @@
       Sign Up
     </div>
     <div class="card-body">
+      <div class="row">
+        <div class="col-6">
+          <%= f.text_field :parent_first_name, autofocus: true, class:"form-control mb-3 col-6", placeholder:"Guardian's First Name" %>
+        </div>
+        <div class="col-6">
+          <%= f.text_field :parent_last_name, autofocus: true, class:"form-control mb-3 col-6", placeholder:"Guardian's Last Name" %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <%= f.text_field :kid_name, autofocus: true, class:"form-control mb-3 col-6", placeholder:"Kiddo's Name" %>
+        </div>
+        <div class="col-8">
+          <%= f.file_field :avatar, class:"form-control mb-3"%>
+        </div>
+      </div>    
       <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control mb-3", placeholder:"Email:" %>
       <%= f.password_field :password, autocomplete: "current-password", class:"form-control mb-3", placeholder:"Password must be at least #{@minimum_password_length} characters long" %>
       <%= f.password_field :password_confirmation, autocomplete: "current-password", class:"form-control mb-3", placeholder:"Confirm Password" %>
-      <%= f.file_field :avatar, class:"form-control mb-4"%>
+      
     </div>
     
     <div class="card-footer text-muted">

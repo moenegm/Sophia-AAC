@@ -77,13 +77,14 @@
   <script type="text/javascript">
     function playSound(event){
       console.log(event);
-      console.log(event.target);
+
       event.preventDefault();
-      const link = event.target;
+
+      const link = event.currentTarget;
       const audio = document.getElementById(link.dataset.audio)
-      // you could add an event listener, instead, for "ended" event.
-      audio.onended = function() { window.location = link.href };
-      
+
+      audio.onended = function() { window.location = link };
+
       audio.play();
     }
   </script>

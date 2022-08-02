@@ -18,18 +18,18 @@
       </div>
 
       <div class="row">
-        <div class="field form-group mb-3 col-6">
+        <div class="field form-group mb-3 col-4">
             <%= f.text_field :kid_name, autofocus: true, autocomplete: "name", class:"form-control mb-3", placeholder:"Kiddo's Name" %>
         </div>   
 
-        <div class="field form-group mb-3 col-6">
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control mb-3", placeholder:"Email"  %>
+        <div class="field form-group mb-3 col-8">
+          <%= f.file_field :avatar, class:"form-control", placeholder:"Choose an Avatar" %>
         </div>      
       </div>
 
       <div class="row">
         <div class="field form-group text-center mb-3">
-          <%= f.file_field :avatar, class:"form-control", placeholder:"Choose an Avatar" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control mb-3", placeholder:"Email"  %>
         </div>      
       </div>
 

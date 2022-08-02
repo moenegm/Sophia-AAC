@@ -22,9 +22,8 @@
                       <% title = category.category %>
                       <div class="col">
                         <div class="card">
-                            <%= image_tag(category.image, class:"request-pic") %>
-                            <%= link_to(category.category, posts_path(:cate => category.id), onclick:"playSound(event)", data:{audio: "#{category.category}"}, class:"btn btn-primary") %>
-                            <%= audio_tag(polymorphic_path(category.sound), id: "#{category.category}") %>                       
+                            <%= link_to image_tag(category.image, class:"request-pic"), posts_path(:cate => category.id), onclick:"playSound(event)", data:{audio: "#{category.category}"} %>
+                            <%= audio_tag(polymorphic_path(category.sound), id: "#{category.category}")%>
                         </div>
 
 
@@ -41,6 +40,7 @@
                 <div class="col mb-3">
                     <div class="col">
                       <%= link_to image_tag(post.image, class:"request-pic"), post %>
+                      <%#= link_to image_tag(post.image.variant(:gravity=>"Center", resize: "300x300^", crop: "300x300+0+0")), post %>
                     </div>
                 </div>
               <% end %>
