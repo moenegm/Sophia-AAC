@@ -1,7 +1,7 @@
 class Category < ApplicationRecord
 
-    validates :title,:category_id,:image, presence: true
-    validates :title, format: { with: /\A[a-zA-Z]+\Z/, message: 'Title cannot contain Upper and Lower Case Characters' }
+    validates :category, :image, presence: true
+    validates :category, format: { with: /\A[a-zA-Z]+\Z/, message: 'Title cannot contain Upper and Lower Case Characters' }
 
     has_one_attached :image
     has_one_attached :sound
