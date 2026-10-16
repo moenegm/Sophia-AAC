@@ -39,8 +39,31 @@ final class SophiaUITests: XCTestCase {
         app.buttons["addWord"].tap()
         let title = app.textFields["cardTitle"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
-        title.tap(); title.typeText("Please")
+        title.tap(); title.typeText("Apple")
+        // Suggestions do not silently choose a picture or rewrite the label.
+        XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Talk")
+        let suggestedApple = app.buttons["library-picture-Apple"]
+        if !suggestedApple.isHittable { app.swipeUp() }
+        suggestedApple.tap()
+        XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Apple")
+        let preview = XCTAttachment(screenshot: app.screenshot())
+        preview.name = "Picture-library-suggestions"
+        preview.lifetime = .keepAlways
+        add(preview)
+        app.buttons["browsePictureLibrary"].tap()
+        let search = app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.tap()
+        if let value = search.value as? String, !value.isEmpty {
+            search.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: value.count))
+        }
+        search.typeText("carrot")
+        let carrot = app.buttons["library-picture-Carrot"]
+        XCTAssertTrue(carrot.waitForExistence(timeout: 5))
+        carrot.tap()
+        XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Carrot")
+        XCTAssertEqual(title.value as? String, "Apple")
         app.buttons["saveCard"].tap()
-        XCTAssertTrue(app.staticTexts["Please"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Apple"].waitForExistence(timeout: 5))
     }
 }

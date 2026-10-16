@@ -1,8 +1,16 @@
 // Run on macOS from the repository root: swift Scripts/generate-assets.swift
-// Bundle rendered starter symbols so the board doesn't depend on a simulator/device emoji font download.
+// Bundle rendered library symbols so the board doesn't depend on a simulator/device emoji font download.
 import AppKit
 let output = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("Assets.xcassets")
-let symbols = ["💬", "🌼", "👍", "👎", "🙋", "🌿", "➕", "✅", "🍎", "🍌", "🍞", "🍝", "🥨", "🍽️", "💧", "🥛", "🧃", "😊", "😢", "😴", "🎧", "🩹", "🫂", "🧸", "🌳", "📚", "🎵", "🎨", "🚽"]
+// Read the catalog so image assets and searchable entries cannot drift apart.
+let source = try String(contentsOfFile: "Sources/PictureLibrary.swift", encoding: .utf8)
+let pattern = try NSRegularExpression(pattern: #"emoji: "([^"]+)""#)
+let matches = pattern.matches(in: source, range: NSRange(source.startIndex..., in: source))
+let symbols = Array(Set(matches.compactMap { match -> String? in
+    guard let range = Range(match.range(at: 1), in: source) else { return nil }
+    return String(source[range])
+})).sorted()
+
 for symbol in symbols {
     let name = "picture-" + symbol.unicodeScalars.map { String($0.value, radix: 16) }.joined(separator: "-")
     let directory = output.appendingPathComponent(name + ".imageset")
@@ -19,4 +27,4 @@ for symbol in symbols {
     let json = "{\"images\":[{\"filename\":\"picture.png\",\"idiom\":\"universal\"}],\"info\":{\"author\":\"xcode\",\"version\":1}}"
     try json.write(to: directory.appendingPathComponent("Contents.json"), atomically: true, encoding: .utf8)
 }
-print("Rendered \(symbols.count) starter symbols.")
+print("Rendered \(symbols.count) library symbols.")

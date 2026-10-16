@@ -10,7 +10,7 @@ Sophia is being rebuilt in SwiftUI for **iPad only**, with offline storage and p
 
 ## Development status
 
-The native app builds, passes six data tests and two UI tests, and is installed and launching on a development iPad. Hands-on testing of speech, personal boards, and cross-device iCloud sync is underway. **There is no public App Store or TestFlight release yet.**
+The native app builds, passes ten data tests and two UI tests, and is installed and launching on a development iPad. Hands-on testing of speech, personal boards, and cross-device iCloud sync is underway. **There is no public App Store or TestFlight release yet.**
 
 See [validation results and remaining checks](Docs/VALIDATION.md).
 
@@ -20,6 +20,8 @@ See [validation results and remaining checks](Docs/VALIDATION.md).
 - Organize large picture cards into categories and favorites.
 - Tap a card to speak, or collect words in a sentence strip with Speak, Undo, Clear, and Stop voice controls.
 - Start with 27 words across Everyday, Food, Drinks, Feelings, and Activities, then personalize them.
+- Choose from 120 bundled pictures. Enter a card label for matching suggestions, or search the full library by name or tag. Parents confirm the picture; suggestions never replace an image or rewrite spoken words automatically.
+- Keep a personal photo instead when it better represents the message. Library pictures work offline and are stored once in the app, not copied into every card.
 - Use a separate parent space to edit profiles, categories, pictures, labels, spoken phrases, favorites, and ordering.
 - Choose English or Arabic speech voices and adjust speaking speed. Changing a voice does not translate card content.
 - Save boards offline, with a separate build configuration for private CloudKit sync across iPads using the same Apple Account.

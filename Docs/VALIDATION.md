@@ -21,3 +21,12 @@ Validated on 16 October 2026 using Xcode 26.3, Swift 6.2.4, and an iPad Pro 13-i
 - CloudKit production schema, distribution signing, App Store metadata/privacy answers, and release checklist.
 
 The Apple account and signing setup work on this Mac; no additional account sign-in was needed. No production release has been made. Personal signing identifiers are kept in the ignored `Configuration/Signing.local.xcconfig` file.
+
+## Picture library update — 16 October 2026
+
+- Added 120 offline library pictures, automatic label suggestions, tag/name search, explicit selection, empty-search browsing, and no-results feedback. Personal photos remain supported.
+- All 12 tests passed: the original six data checks, four library/search/asset/backup checks, and two UI flows including selecting a suggestion and searching the full library without changing card text.
+- Signed iCloud device build passed and the update installed successfully over the existing iPad app.
+- No SwiftData schema or backup-format change. Library selections store the existing shared symbol identifier and no photo data; photo selections keep their existing behavior.
+- Asset folder size is approximately 5 MB, including the app icon. No image-generation service or online picture search is used.
+- Voice selection is unchanged: Apple speech synthesis selects by language. A named Enhanced/Premium voice picker is not included in this change.
