@@ -1,20 +1,27 @@
-class Category < ApplicationRecord
+require 'uri'
+require 'net/http'
+require 'openssl'
+require 'base64'
 
-    validates :category, :image, presence: true
-    validates :category, format: { with: /\A[a-zA-Z]+\Z/, message: 'Title cannot contain Upper and Lower Case Characters' }
+class Post < ApplicationRecord
+
+    validates :title,:category_id,:image, presence: true
+    # validates :title, format: { with: /\A[a-zA-Z0-9-_]+\Z/, message: 'Title cannot contain whitespace or special characters' }
+
+    belongs_to :user
+    belongs_to :category
 
     has_one_attached :image
     has_one_attached :sound
 
-    has_many :posts
-    belongs_to :user
+
 
     public
     # module_function
 
     def self.text_to_speech(text)
         voice = speech({
-        'key' => '6474bf093c804dd6a0fd92ed8aac4519',
+        'key' => ENV.fetch("VOICERSS_API_KEY", ""),
         'hl' => 'en-us',
         'v' => 'Mary',
         'src' => "#{text}",
@@ -34,8 +41,8 @@ class Category < ApplicationRecord
         return "temp.mp3"
     end
 
-    def self.attach_sound(category)
-        category.sound.attach(io: File.open("app/assets/audios/temp.mp3"), filename: "#{category.category}.mp3")
+    def self.attach_sound(post)
+        post.sound.attach(io: File.open("app/assets/audios/temp.mp3"), filename: "#{post.title}.mp3")
     end    
     def self.speech(settings)
       _validate(settings)

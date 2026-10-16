@@ -1,0 +1,3 @@
+#include "Base.xcconfig"
+SOPHIA_CLOUD_SYNC_ENABLED = YES
+CODE_SIGN_ENTITLEMENTS = Configuration/Sophia.entitlements
