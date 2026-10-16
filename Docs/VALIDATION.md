@@ -49,3 +49,9 @@ The Apple account and signing setup work on this Mac; no additional account sign
 - Kept voice download instructions and added an explanation that Siri voices are unavailable to this speech API. Reference: https://developer.apple.com/videos/play/wwdc2020/10022/ .
 - All 14 unit tests and both existing UI flows passed after these changes. Signed CloudDebug build passed; the update installed and launched on the paired iPad.
 - Additional portrait UI regression passed: the question remains hittable, no system keyboard appears, and keypad entry, delete, and clear work. Total: 17 passing tests across the full suite and targeted portrait run.
+
+## Voice group filter correction — 16 October 2026
+
+- Replaced the Samantha/Eddy name restriction with an exclusion of Eloquence provider identifiers and Apple’s `isNoveltyVoice` trait. Other app-available voices matching the selected language remain selectable, including future downloads.
+- Preserved download instructions, previews, selection persistence, and refresh. Existing selections from excluded groups fall back to an allowed voice.
+- Three focused voice tests passed: excluded groups, complete allowed-language enumeration and identifier resolution, and unavailable-selection fallback. Signed CloudDebug device build passed and installed successfully on the paired iPad.

@@ -3,14 +3,14 @@ import AVFoundation
 
 @MainActor enum VoiceOptions {
     static func available(for language: String) -> [AVSpeechSynthesisVoice] {
-        AVSpeechSynthesisVoice.speechVoices().filter { $0.language == language && isPreferredName($0.name) }
+        AVSpeechSynthesisVoice.speechVoices().filter { $0.language == language && isAllowed(identifier: $0.identifier, traits: $0.voiceTraits) }
             .sorted { a, b in
                 a.quality.rawValue == b.quality.rawValue ? a.name < b.name : a.quality.rawValue > b.quality.rawValue
             }
     }
-    static func isPreferredName(_ name: String) -> Bool {
-        let base = name.lowercased().split(separator: " ").first.map(String.init) ?? ""
-        return ["samantha", "eddy"].contains(base)
+    // Apple exposes Novelty as a trait; Eloquence identifies its provider in the voice ID.
+    static func isAllowed(identifier: String, traits: AVSpeechSynthesisVoice.Traits) -> Bool {
+        !traits.contains(.isNoveltyVoice) && !identifier.lowercased().split(separator: ".").contains("eloquence")
     }
     static func quality(_ voice: AVSpeechSynthesisVoice) -> String {
         switch voice.quality {
@@ -20,11 +20,14 @@ import AVFoundation
         }
     }
     static func resolve(identifier: String?, language: String) -> AVSpeechSynthesisVoice? {
-        if let identifier, !identifier.isEmpty, let voice = AVSpeechSynthesisVoice(identifier: identifier), voice.language == language, isPreferredName(voice.name) {
+        if let identifier, !identifier.isEmpty, let voice = AVSpeechSynthesisVoice(identifier: identifier), voice.language == language, isAllowed(identifier: voice.identifier, traits: voice.voiceTraits) {
             return voice
         }
         let choices = available(for: language)
-        return choices.first(where: { $0.name.lowercased().hasPrefix("samantha") }) ?? choices.first ?? AVSpeechSynthesisVoice(language: language)
+        if let preferred = choices.first(where: { $0.name.lowercased().hasPrefix("samantha") }) ?? choices.first { return preferred }
+        guard let fallback = AVSpeechSynthesisVoice(language: language),
+              isAllowed(identifier: fallback.identifier, traits: fallback.voiceTraits) else { return nil }
+        return fallback
     }
 }
 
@@ -38,7 +41,7 @@ struct VoicePicker: View {
         List {
             Section {
                 if voices.isEmpty {
-                    Text("Samantha and Eddy aren’t available for this language on this iPad. Sophia will use the system voice. See the download instructions below.")
+                    Text("No app-compatible voices are currently available for this language on this iPad. Sophia will use the system voice. See the download instructions below.")
                 }
                 ForEach(voices, id: \.identifier) { voice in
                     HStack(spacing: 14) {
@@ -59,13 +62,13 @@ struct VoicePicker: View {
                         .buttonStyle(.borderless).accessibilityLabel("Preview \(voice.name), \(VoiceOptions.quality(voice))")
                     }
                 }
-            } header: { Text("Samantha and Eddy") } footer: {
-                Text("The selected voice is used for all cards and sentences on this iPad. If it is removed, Sophia uses Samantha when available, then Eddy, then the system voice for this language.")
+            } header: { Text("Available on this iPad") } footer: {
+                Text("The selected voice is used for all cards and sentences on this iPad. If it is removed, Sophia uses an available fallback voice for this language.")
             }
             Section("More natural voices") {
-                Text("Download available Samantha or Eddy voice qualities in iPad Settings → Accessibility → Read & Speak (called Spoken Content on some versions) → Voices. Return here after the download finishes.")
+                Text("Download additional voices, including Enhanced or Premium versions when offered, in iPad Settings → Accessibility → Read & Speak (called Spoken Content on some versions) → Voices. Return here after the download finishes.")
                 Button("Refresh voices", systemImage: "arrow.clockwise") { refresh() }
-                Text("Sophia lists Samantha and Eddy when Apple makes them available for the selected language. Siri voices cannot be used by this app. Downloaded voices can be used offline; availability varies by language and iPadOS version.").font(.caption).foregroundStyle(.secondary)
+                Text("Sophia lists voices Apple makes available to apps for the selected language, excluding Eloquence and Novelty. Siri voices cannot be used by this app. Downloaded voices can be used offline; availability varies by language and iPadOS version.").font(.caption).foregroundStyle(.secondary)
             }
             if !identifier.isEmpty && !voices.contains(where: { $0.identifier == identifier }) {
                 Text("Your selected voice is unavailable. Sophia is using an available fallback voice.").foregroundStyle(.secondary)
