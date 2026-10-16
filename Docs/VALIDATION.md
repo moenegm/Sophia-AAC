@@ -11,7 +11,7 @@ Validated on 16 October 2026 using Xcode 26.3, Swift 6.2.4, and an iPad Pro 13-i
 - Release guard: confirmed that Release configuration rejects the presence of `legacy/`.
 - Git whitespace checks: passed.
 - Signed CloudDebug app installed successfully on the paired iPad Pro 13-inch (M4) after the connection recovered.
-- First launch was denied because the iPad was locked. Unlock the iPad and open Sophia before startup and live iCloud verification. Installation is confirmed; live sync is not.
+- After the iPad was connected over USB and unlocked, the signed app launched successfully. A 25-second startup console capture showed no storage or CloudKit initialization errors. Sophia was then launched normally and left open. This confirms launch, not successful cross-device sync or audible speech.
 
 ## Still requires a hands-on iPad check
 
