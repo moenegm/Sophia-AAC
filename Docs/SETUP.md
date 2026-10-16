@@ -30,9 +30,9 @@ Real iCloud sync requires a provisioned container and signed devices. Simulator/
 
 Open **Parent space**, solve the parent check, then choose a profile's options to select, edit, export, or delete it. Open **Edit …’s words** to manage categories and words. Swipe or long-press for edit/delete actions. Use Edit to reorder categories or cards. Words may use a label, custom spoken phrase, photo or library picture/emoji, and favorite flag.
 
-The card editor suggests pictures as you enter the label. Tap a suggestion to choose it, or choose **Browse picture library** to search all 120 bundled pictures by name or tag. Clear the search to browse all pictures. There is an explicit no-results state with an option to show all pictures. Selecting a library picture replaces the draft photo; Cancel leaves the saved card unchanged. Changing a label alone never changes the chosen picture or custom spoken phrase. You can still choose a personal photo or use the custom emoji option.
+The card editor suggests pictures as you enter the label. Tap a suggestion to choose it, or choose **Browse picture library** to search all 3,557 bundled pictures by name or tag. Clear the search to browse all pictures. There is an explicit no-results state with an option to show all pictures. Selecting a library picture replaces the draft photo; Cancel leaves the saved card unchanged. Changing a label alone never changes the chosen picture or custom spoken phrase. You can still choose a personal photo or use the custom emoji option.
 
-Library images are bundled once. Cards keep the existing shared symbol identifier, so no image data is duplicated into cards, CloudKit records, or backups for library selections. The storage schema and version-1 backup format are unchanged.
+Library images are bundled once. Cards keep only a shared symbol or library identifier, so no image data is duplicated into cards, CloudKit records, or backups for library selections. The larger collection adds an optional `libraryID` to cards. Existing cards keep their original symbols/photos, and backups without that field still restore. New exports include it when needed; images are never duplicated in the backup for bundled-library selections.
 
 Export makes a separate JSON backup including photos. Restore adds a new profile and never overwrites an existing board. iCloud sync propagates deletions; it isn't an independent backup. Keep exported files private.
 
@@ -49,3 +49,13 @@ xcodebuild -project Sophia-AAC.xcodeproj -scheme Sophia-AAC \
 Unit tests cover starter board ownership, speech fallback, persistence after reopening the store, backup round trips/validation, deletion isolation, picture-search ranking/tags, catalog asset availability, and library identifier backup compatibility. UI tests cover card selection, sentence controls, category filtering, parent entry, creating a word, suggested picture selection, full-library search, and keeping card text unchanged.
 
 `Scripts/generate-project.py` regenerates the committed project with Python's standard library. It includes Swift files from Sources, Tests, and UITests, the asset catalog, and privacy manifest. Configuration/Signing.local.xcconfig must never become a project reference or get committed. Regenerating replaces manual project edits; put repeatable changes into the generator.
+
+## Choosing a voice
+
+Open Parent space → Voice → Choose a voice. Tap a name to select it, or the play button to preview it. The chosen identifier is saved locally and used for all cards and sentences. Voices are grouped by the selected language and labeled Standard, Enhanced, or Premium. Changing languages resets the choice to that language’s system default. An unavailable voice falls back to the system voice so communication still works.
+
+Download additional voices in Settings → Accessibility → Read & Speak (Spoken Content on some iPadOS versions) → Voices, then return to Sophia or tap Refresh voices. Only voices made available to apps by Apple can be selected. Availability varies by device and language. Voice downloads and the saved selection are device-specific; they are not copied between iPads by CloudKit.
+
+## Rebuilding the expanded symbols
+
+`Scripts/import-symbols.py SOURCE_CHECKOUT REPOSITORY_ROOT` renders the Mulberry collection using `rsvg-convert` and adds the project’s chicken-wings SVG. The imported revision is `9cbab9f400c5de44e2bc58839cca07294aadb086` from https://github.com/mulberrysymbols/mulberry-symbols. Preserve the license, attribution, upstream symbol IDs, and custom SVG when rebuilding.

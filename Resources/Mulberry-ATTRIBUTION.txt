@@ -1,0 +1,7 @@
+Mulberry Symbols by Steve Lee are licensed under Creative Commons Attribution-ShareAlike 4.0.
+https://mulberrysymbols.org
+https://creativecommons.org/licenses/by-sa/4.0/
+Source: https://github.com/mulberrysymbols/mulberry-symbols
+Revision: 9cbab9f400c5de44e2bc58839cca07294aadb086
+Changes: SVG originals rendered to 256 × 256 PNG thumbnails; symbol names normalized for display.
+The symbol artwork and derived thumbnails remain available under CC BY-SA 4.0, independently of app source licensing.

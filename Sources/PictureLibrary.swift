@@ -1,17 +1,22 @@
 import Foundation
+import UIKit
 
-struct LibraryPicture: Identifiable, Hashable {
+struct LibraryPicture: Identifiable, Hashable, Decodable {
     let name: String
-    // The existing stored emoji is also the shared picture identifier. This keeps
-    // old boards, CloudKit records, and version-1 backups compatible without migration.
+    // Original pictures retain their emoji IDs. Expanded pictures use stable source IDs;
+    // cards keep the optional libraryID separately so existing boards remain intact.
     let emoji: String
     let keywords: String
-    var id: String { emoji }
-    var assetName: String { PictureLibrary.assetName(for: emoji) }
+    let sourceID: String?
+    init(name: String, emoji: String, keywords: String, sourceID: String? = nil) {
+        self.name = name; self.emoji = emoji; self.keywords = keywords; self.sourceID = sourceID
+    }
+    var id: String { sourceID ?? emoji }
+    var assetName: String { sourceID ?? PictureLibrary.assetName(for: emoji) }
 }
 
 enum PictureLibrary {
-    static let pictures: [LibraryPicture] = [
+    private static let starterPictures: [LibraryPicture] = [
         .init(name: "Yes", emoji: "👍", keywords: "agree okay ok sure نعم"),
         .init(name: "No", emoji: "👎", keywords: "stop refuse disagree لا"),
         .init(name: "Help", emoji: "🙋", keywords: "assist assistance need help مساعدة"),
@@ -134,11 +139,31 @@ enum PictureLibrary {
         .init(name: "Talk", emoji: "💬", keywords: "talk speak words chat كلام"),
     ]
 
+    private static let bundledPictures: [LibraryPicture] = {
+        guard let url = Bundle.main.url(forResource: "catalog", withExtension: "json", subdirectory: "Pictures"),
+              let data = try? Data(contentsOf: url),
+              let entries = try? JSONDecoder().decode([LibraryPicture].self, from: data) else { return [] }
+        return entries
+    }()
+    static let pictures = starterPictures + bundledPictures
+    private static let byID = Dictionary(pictures.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+    private struct IndexedPicture {
+        let picture: LibraryPicture
+        let name: [String]
+        let tags: [String]
+        let words: [String]
+    }
+    // Normalize once, not once per symbol on every keystroke.
+    private static let index: [IndexedPicture] = pictures.map {
+        let name = normalized($0.name), tags = normalized($0.keywords)
+        return IndexedPicture(picture: $0, name: name, tags: tags, words: name + tags)
+    }
+
     static func assetName(for symbol: String) -> String {
         "picture-" + symbol.unicodeScalars.map { String($0.value, radix: 16) }.joined(separator: "-")
     }
     static func picture(for symbol: String) -> LibraryPicture? {
-        pictures.first { $0.emoji == symbol }
+        byID[symbol]
     }
     private static func normalized(_ text: String) -> [String] {
         text.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "en_US_POSIX"))
@@ -152,16 +177,32 @@ enum PictureLibrary {
         let tokens = raw.filter { !stopWords.contains($0) }
         guard !tokens.isEmpty else { return [] }
         let phrase = raw.joined(separator: " ")
-        return pictures.enumerated().compactMap { index, item -> (LibraryPicture, Int, Int)? in
-            let name = normalized(item.name)
-            let tags = normalized(item.keywords)
-            let words = name + tags
+        return index.enumerated().compactMap { position, entry -> (LibraryPicture, Int, Int)? in
+            let item = entry.picture, name = entry.name, tags = entry.tags, words = entry.words
             guard tokens.allSatisfy({ token in words.contains { $0.hasPrefix(token) } }) else { return nil }
             let score = (name.joined(separator: " ") == phrase ? 1000 : 0)
                 + tokens.reduce(0) { total, token in
                     total + (name.contains(token) ? 100 : tags.contains(token) ? 50 : 10)
                 }
-            return (item, score, index)
+            return (item, score, position)
         }.sorted { $0.1 == $1.1 ? $0.2 < $1.2 : $0.1 > $1.1 }.map { $0.0 }
+    }
+}
+
+@MainActor enum PictureImageStore {
+    private static let cache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = 64
+        cache.totalCostLimit = 24 * 1024 * 1024
+        return cache
+    }()
+    static func image(for picture: LibraryPicture) -> UIImage? {
+        if picture.sourceID == nil { return UIImage(named: picture.assetName) }
+        let key = picture.id as NSString
+        if let cached = cache.object(forKey: key) { return cached }
+        guard let url = Bundle.main.url(forResource: picture.id, withExtension: "png", subdirectory: "Pictures"),
+              let image = UIImage(contentsOfFile: url.path) else { return nil }
+        cache.setObject(image, forKey: key, cost: 256 * 256 * 4)
+        return image
     }
 }

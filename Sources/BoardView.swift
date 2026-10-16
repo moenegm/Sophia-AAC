@@ -13,6 +13,7 @@ struct BoardView: View {
     @Query(sort: \ChildProfile.createdAt) private var profiles: [ChildProfile]
     @AppStorage("selectedProfile") private var selectedProfileID = ""
     @AppStorage("speechRate") private var speechRate = 0.45
+    @AppStorage("speechVoiceIdentifier") private var speechVoiceIdentifier = ""
     @AppStorage("speechLanguage") private var speechLanguage = "en-US"
     @State private var filter: BoardFilter = .all
     @State private var speech = SpeechController()
@@ -215,11 +216,11 @@ struct BoardView: View {
         Button {
             if phrase.count < 12 { phrase.append(PhrasePart(text: card.phrase, label: card.title)) }
             highlighted = card.id
-            speech.speak(card.phrase, rate: speechRate, language: speechLanguage)
+            speech.speak(card.phrase, rate: speechRate, language: speechLanguage, voiceIdentifier: speechVoiceIdentifier)
         } label: {
             VStack(spacing: 0) {
                 ZStack(alignment: .topTrailing) {
-                    Picture(data: card.photo, emoji: card.emoji)
+                    Picture(data: card.photo, emoji: card.emoji, libraryID: card.libraryID)
                         .frame(maxWidth: .infinity).frame(height: 133).clipped()
                         .background(Color.boardTint(card.category?.colorIndex ?? 0))
                     if card.isFavorite {
@@ -259,7 +260,7 @@ struct BoardView: View {
                     }
                 }
                 Button {
-                    speech.speak(phrase.map(\.text).joined(separator: ". "), rate: speechRate, language: speechLanguage)
+                    speech.speak(phrase.map(\.text).joined(separator: ". "), rate: speechRate, language: speechLanguage, voiceIdentifier: speechVoiceIdentifier)
                 } label: {
                     Label("Speak", systemImage: "play.fill").font(.headline).padding(.horizontal, 20).padding(.vertical, 13)
                 }.buttonStyle(.borderedProminent).disabled(phrase.isEmpty).accessibilityIdentifier("speakSentence")

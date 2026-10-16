@@ -30,3 +30,14 @@ The Apple account and signing setup work on this Mac; no additional account sign
 - No SwiftData schema or backup-format change. Library selections store the existing shared symbol identifier and no photo data; photo selections keep their existing behavior.
 - Asset folder size is approximately 5 MB, including the app icon. No image-generation service or online picture search is used.
 - Voice selection is unchanged: Apple speech synthesis selects by language. A named Enhanced/Premium voice picker is not included in this change.
+
+## Expanded library and voice picker — 16 October 2026
+
+- Expanded to 3,557 offline pictures: the original 120, 3,436 Mulberry symbols, and a dedicated chicken-wings illustration. Mulberry attribution and CC BY-SA 4.0 license ship with the app; the parent area includes credits.
+- All 14 unit tests passed, including every bundled picture loading, unique identifiers, phrase searches, old-backup compatibility, new picture identifiers surviving backup/restore, and voice selection/fallback.
+- Warmed search benchmark on the simulator: approximately 3.3 milliseconds per query across 100 searches over the full collection. This is a simulator measurement, not a real-iPad latency or memory benchmark.
+- Expanded PNG files add approximately 47 MB. The UI uses a lazy grid, precomputed search terms, and a 64-image/24 MiB cache; each card stores a reference rather than copying a library picture.
+- Added installed Apple voice selection, quality labels, individual previews, download instructions, and fallback when a selected voice is unavailable. Selection persists locally on each iPad.
+- Signed CloudDebug device build passed. The updated app installed over the existing app and launched successfully on the paired iPad Pro 13-inch (M4).
+- Real audible voice quality, downloading Enhanced/Premium voices, and cross-device CloudKit sync still require hands-on checks. Simulator voice services emitted fallback warnings; automated voice tests do not establish audio quality.
+- Both UI tests passed: board communication controls, parent gate, saved voice selection, explicit picture suggestions, full-library chicken-wings search/selection, unchanged card text, and saving the card. Total: 16 passing tests.

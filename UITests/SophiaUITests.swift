@@ -34,34 +34,56 @@ final class SophiaUITests: XCTestCase {
         answer.tap(); answer.typeText(String(numbers.reduce(0,+)))
         app.buttons["unlockParent"].tap()
         XCTAssertTrue(app.navigationBars["Parent space"].waitForExistence(timeout: 5))
+        app.buttons["chooseVoice"].tap()
+        XCTAssertTrue(app.navigationBars["Choose a voice"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["System default"].exists)
+        let voice = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'select-voice-'")).firstMatch
+        if voice.exists {
+            let voiceID = voice.identifier
+            voice.tap()
+            XCTAssertEqual(voice.value as? String, "Selected")
+            app.navigationBars.buttons.firstMatch.tap()
+            app.buttons["chooseVoice"].tap()
+            XCTAssertEqual(app.buttons[voiceID].value as? String, "Selected")
+        }
+        app.navigationBars.buttons.firstMatch.tap()
         app.buttons["Edit Alex’s words"].tap()
         app.buttons["Everyday · 6"].tap()
         app.buttons["addWord"].tap()
         let title = app.textFields["cardTitle"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
         title.tap(); title.typeText("Apple")
+        if app.buttons["Done typing"].exists { app.buttons["Done typing"].tap() }
         // Suggestions do not silently choose a picture or rewrite the label.
         XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Talk")
         let suggestedApple = app.buttons["library-picture-Apple"]
-        if !suggestedApple.isHittable { app.swipeUp() }
+        if !suggestedApple.isHittable { app.collectionViews["cardEditorForm"].swipeUp() }
         suggestedApple.tap()
         XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Apple")
         let preview = XCTAttachment(screenshot: app.screenshot())
         preview.name = "Picture-library-suggestions"
         preview.lifetime = .keepAlways
         add(preview)
-        app.buttons["browsePictureLibrary"].tap()
+        let browse = app.buttons["browsePictureLibrary"]
+        if !browse.isHittable { app.swipeDown() }
+        browse.tap()
         let search = app.searchFields.firstMatch
         XCTAssertTrue(search.waitForExistence(timeout: 5))
         search.tap()
         if let value = search.value as? String, !value.isEmpty {
             search.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: value.count))
         }
-        search.typeText("carrot")
-        let carrot = app.buttons["library-picture-Carrot"]
+        search.typeText("chicken wings")
+        let carrot = app.buttons["library-picture-Chicken wings"]
         XCTAssertTrue(carrot.waitForExistence(timeout: 5))
         carrot.tap()
-        XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Carrot")
+        XCTAssertEqual(app.staticTexts["selectedPictureName"].label, "Chicken wings")
+        let form = app.collectionViews["cardEditorForm"]
+        for _ in 0..<3 {
+            if title.exists { break }
+            form.swipeDown()
+        }
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
         XCTAssertEqual(title.value as? String, "Apple")
         app.buttons["saveCard"].tap()
         XCTAssertTrue(app.staticTexts["Apple"].waitForExistence(timeout: 5))

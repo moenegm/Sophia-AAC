@@ -7,7 +7,11 @@ struct LibraryPictureButton: View {
     var body: some View {
         Button(action: choose) {
             VStack(spacing: 6) {
-                Image(picture.assetName).resizable().scaledToFit().frame(height: 64)
+                Group {
+                    if let image = PictureImageStore.image(for: picture) {
+                        Image(uiImage: image).resizable().scaledToFit()
+                    } else { Image(systemName: "photo") }
+                }.frame(height: 64)
                     .padding(8).frame(maxWidth: .infinity)
                     .background(Color.sophiaCanvas, in: RoundedRectangle(cornerRadius: 12))
                 HStack(spacing: 3) {
@@ -53,7 +57,7 @@ struct PictureLibraryView: View {
                         Text("\(results.count) pictures").font(.caption).foregroundStyle(.secondary)
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 100, maximum: 160), spacing: 12)], spacing: 12) {
                             ForEach(results) { picture in
-                                LibraryPictureButton(picture: picture, selected: selectedSymbol == picture.emoji) {
+                                LibraryPictureButton(picture: picture, selected: selectedSymbol == picture.id) {
                                     onSelect(picture)
                                     dismiss()
                                 }

@@ -10,7 +10,7 @@ Sophia is being rebuilt in SwiftUI for **iPad only**, with offline storage and p
 
 ## Development status
 
-The native app builds, passes ten data tests and two UI tests, and is installed and launching on a development iPad. Hands-on testing of speech, personal boards, and cross-device iCloud sync is underway. **There is no public App Store or TestFlight release yet.**
+The native app builds, passes the data and iPad interaction tests, and is installed and launching on a development iPad. Hands-on testing of speech, personal boards, and cross-device iCloud sync is underway. **There is no public App Store or TestFlight release yet.**
 
 See [validation results and remaining checks](Docs/VALIDATION.md).
 
@@ -20,10 +20,10 @@ See [validation results and remaining checks](Docs/VALIDATION.md).
 - Organize large picture cards into categories and favorites.
 - Tap a card to speak, or collect words in a sentence strip with Speak, Undo, Clear, and Stop voice controls.
 - Start with 27 words across Everyday, Food, Drinks, Feelings, and Activities, then personalize them.
-- Choose from 120 bundled pictures. Enter a card label for matching suggestions, or search the full library by name or tag. Parents confirm the picture; suggestions never replace an image or rewrite spoken words automatically.
+- Choose from 3,557 bundled pictures, including the Mulberry AAC symbol collection and a dedicated chicken-wings illustration. Enter a card label for matching suggestions, or search the full library by name or tag. Parents confirm the picture; suggestions never replace an image or rewrite spoken words automatically.
 - Keep a personal photo instead when it better represents the message. Library pictures work offline and are stored once in the app, not copied into every card.
 - Use a separate parent space to edit profiles, categories, pictures, labels, spoken phrases, favorites, and ordering.
-- Choose English or Arabic speech voices and adjust speaking speed. Changing a voice does not translate card content.
+- Choose an available voice by name in Parent space, preview it, and adjust speaking speed. Enhanced/Premium quality is shown when available; the choice is remembered on this iPad. Changing a voice does not translate card content.
 - Save boards offline, with a separate build configuration for private CloudKit sync across iPads using the same Apple Account.
 - Export a separate JSON backup and restore it as a new profile without overwriting an existing board.
 
@@ -47,6 +47,12 @@ Full instructions: [setup, signing, iCloud, backups, and tests](Docs/SETUP.md).
 The native app uses SwiftData on the iPad and, in the iCloud build, the parent's private CloudKit database. There is no Sophia login, third-party speech service, advertising, or analytics SDK.
 
 CloudKit sync is eventual and carries edits and deletions between devices; it is not an independent backup. Export a separate backup when needed. Exported files include profile names and photos, so keep them private.
+
+## Picture library and performance
+
+The library uses small 256-pixel thumbnails, lazy grids, pre-indexed search terms, and a bounded image cache. Pictures are stored once; each card saves only its selected identifier. The expanded thumbnails add about 47 MB of files. Search performance and device checks are recorded in [validation](Docs/VALIDATION.md).
+
+Mulberry Symbols by Steve Lee are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See [artwork attribution](Resources/Mulberry-ATTRIBUTION.txt) and [license](Resources/Mulberry-LICENSE.txt). Credits are also available in Parent space. This artwork license applies to the Mulberry pictures and their rendered thumbnails.
 
 ## Built with
 

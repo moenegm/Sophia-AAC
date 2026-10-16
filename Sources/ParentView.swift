@@ -9,6 +9,7 @@ struct ParentView: View {
     @Query(sort: \ChildProfile.createdAt) private var profiles: [ChildProfile]
     @Binding var selectedProfileID: String
     @AppStorage("speechRate") private var speechRate = 0.45
+    @AppStorage("speechVoiceIdentifier") private var speechVoiceIdentifier = ""
     @AppStorage("speechLanguage") private var speechLanguage = "en-US"
     @State private var newProfile = false
     @State private var editedProfile: ChildProfile?
@@ -52,23 +53,7 @@ struct ParentView: View {
                     Text("Choose a board in its options menu. Each child has their own words, photos, and favorites.")
                 }
 
-                Section("Voice") {
-                    Picker("Language", selection: $speechLanguage) {
-                        Text("English (US)").tag("en-US")
-                        Text("English (UK)").tag("en-GB")
-                        Text("Arabic").tag("ar-SA")
-                    }
-                    HStack {
-                        Text("Slower").font(.caption)
-                        Slider(value: $speechRate, in: 0.3...0.6, step: 0.025).accessibilityLabel("Speaking speed")
-                        Text("Faster").font(.caption)
-                    }
-                    Button("Try voice", systemImage: "speaker.wave.2") {
-                        speech.speak(speechLanguage == "ar-SA" ? "مرحباً" : "Hello. This is my voice.", rate: speechRate, language: speechLanguage)
-                    }
-                    Text("Use Settings → Accessibility → Spoken Content on your iPad to download additional voices. Labels and spoken words are edited individually; changing the voice does not translate them.")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
+                voiceSettings
 
                 Section("Storage & backup") {
                     Label(cloudEnabled ? cloudStatus : "Saved on this iPad", systemImage: cloudEnabled ? "icloud" : "ipad")
@@ -80,6 +65,8 @@ struct ParentView: View {
                     Text("iCloud sync carries deletions between devices. Export a separate backup from a profile’s options menu. Backup files include photos and names; keep them somewhere private. Restoring adds a new profile.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
+                pictureCredits
+
                 Section("About Sophia") {
                     Text("An iPad communication board. No Sophia login, ads, or third-party speech service.")
                     Text("For a focused session, you can enable Guided Access in iPad Settings. The parent check only discourages accidental editing; it is not a password lock.")
@@ -133,8 +120,41 @@ struct ParentView: View {
                     }
                 } catch { cloudStatus = "Couldn’t check iCloud. Local boards remain available." }
             }
+            .onChange(of: speechLanguage) { _, _ in speechVoiceIdentifier = ""; speech.stop() }
             .onDisappear { speech.stop() }
         }.tint(.sophiaTeal)
+    }
+    private var voiceSettings: some View {
+        Section("Voice") {
+                    Picker("Language", selection: $speechLanguage) {
+                        Text("English (US)").tag("en-US")
+                        Text("English (UK)").tag("en-GB")
+                        Text("Arabic").tag("ar-SA")
+                    }
+                    NavigationLink {
+                        VoicePicker(identifier: $speechVoiceIdentifier, language: speechLanguage, rate: speechRate)
+                    } label: {
+                        LabeledContent("Voice", value: VoiceOptions.resolve(identifier: speechVoiceIdentifier, language: speechLanguage)?.name ?? "System default")
+                    }.accessibilityIdentifier("chooseVoice")
+                    HStack {
+                        Text("Slower").font(.caption)
+                        Slider(value: $speechRate, in: 0.3...0.6, step: 0.025).accessibilityLabel("Speaking speed")
+                        Text("Faster").font(.caption)
+                    }
+                    Button("Try voice", systemImage: "speaker.wave.2") {
+                        speech.speak(speechLanguage == "ar-SA" ? "مرحباً" : "Hello. This is my voice.", rate: speechRate, language: speechLanguage, voiceIdentifier: speechVoiceIdentifier)
+                    }
+                    Text("Open Voice to preview installed voices or find instructions for downloading Enhanced and Premium voices. Labels and spoken words are edited individually; changing the voice does not translate them.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+    }
+    private var pictureCredits: some View {
+        Section("Picture credits") {
+                    Text("Mulberry Symbols by Steve Lee, CC BY-SA 4.0. Rendered as small PNG thumbnails for offline use.")
+                    Link("Mulberry Symbols", destination: URL(string: "https://mulberrysymbols.org")!)
+                    Link("Artwork license and source", destination: URL(string: "https://github.com/mulberrysymbols/mulberry-symbols")!)
+                    Text("Custom chicken-wings artwork is included with Sophia. Parents choose which pictures to put on each child’s board.").font(.caption).foregroundStyle(.secondary)
+                }
     }
     private func export(_ profile: ChildProfile) {
         do {
@@ -204,7 +224,7 @@ struct CardManager: View {
             ForEach(category.sortedCards) { card in
                 Button { editing = card } label: {
                     HStack {
-                        Picture(data: card.photo, emoji: card.emoji).frame(width: 50, height: 50).clipped()
+                        Picture(data: card.photo, emoji: card.emoji, libraryID: card.libraryID).frame(width: 50, height: 50).clipped()
                         VStack(alignment: .leading) {
                             Text(card.title).font(.headline)
                             Text(card.phrase).font(.caption).foregroundStyle(.secondary)

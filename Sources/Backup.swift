@@ -17,6 +17,7 @@ struct BoardBackup: Codable {
     struct Card: Codable {
         var title: String
         var spokenText: String
+        var libraryID: String?
         var emoji: String
         var isFavorite: Bool
         var photo: Data?
@@ -26,7 +27,7 @@ struct BoardBackup: Codable {
         categories = profile.sortedCategories.map { category in
             Category(name: category.name, symbol: category.symbol, colorIndex: category.colorIndex,
                      photo: category.photo, cards: category.sortedCards.map {
-                Card(title: $0.title, spokenText: $0.spokenText, emoji: $0.emoji, isFavorite: $0.isFavorite, photo: $0.photo)
+                Card(title: $0.title, spokenText: $0.spokenText, libraryID: $0.libraryID, emoji: $0.emoji, isFavorite: $0.isFavorite, photo: $0.photo)
             })
         }
     }
@@ -35,7 +36,7 @@ struct BoardBackup: Codable {
         let photos = [photo] + categories.flatMap { [$0.photo] + $0.cards.map(\.photo) }
         guard photos.allSatisfy({ ($0?.count ?? 0) <= 5_000_000 }) else { throw BackupError.invalid }
         guard categories.allSatisfy({ !$0.name.trimmed.isEmpty && $0.name.count <= 60 && $0.cards.count <= 500 &&
-            $0.cards.allSatisfy { !$0.title.trimmed.isEmpty && $0.title.count <= 60 && $0.spokenText.count <= 200 && $0.emoji.count <= 2 }
+            $0.cards.allSatisfy { !$0.title.trimmed.isEmpty && $0.title.count <= 60 && $0.spokenText.count <= 200 && $0.emoji.count <= 2 && ($0.libraryID?.count ?? 0) <= 100 }
         }) else { throw BackupError.invalid }
     }
     @MainActor func restore(in context: ModelContext) throws -> ChildProfile {
@@ -51,7 +52,7 @@ struct BoardBackup: Codable {
             for (index, card) in category.cards.enumerated() {
                 let item = CommunicationCard(title: card.title, spokenText: card.spokenText, emoji: card.emoji,
                                              position: index, category: group)
-                item.photo = card.photo; item.isFavorite = card.isFavorite
+                item.libraryID = card.libraryID; item.photo = card.photo; item.isFavorite = card.isFavorite
                 context.insert(item)
             }
         }

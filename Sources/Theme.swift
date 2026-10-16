@@ -27,10 +27,12 @@ struct BrandMark: View {
 struct Picture: View {
     let data: Data?
     var emoji = "💬"
+    var libraryID: String? = nil
     var body: some View {
         if let data, let image = UIImage(data: data) {
             Image(uiImage: image).resizable().scaledToFill()
-        } else if let symbol = UIImage(named: PictureLibrary.assetName(for: emoji)) {
+        } else if let entry = PictureLibrary.picture(for: libraryID ?? emoji),
+                  let symbol = PictureImageStore.image(for: entry) {
             Image(uiImage: symbol).resizable().scaledToFit().padding(8)
         } else {
             Text(emoji).font(.system(size: 64)).minimumScaleFactor(0.6)

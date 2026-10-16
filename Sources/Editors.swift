@@ -150,39 +150,43 @@ struct CardEditor: View {
     @State private var title = ""
     @State private var spokenText = ""
     @State private var emoji = "💬"
+    @State private var libraryID: String?
     @State private var favorite = false
     @State private var photo: Data?
     @State private var error: String?
     @State private var showLibrary = false
+    @FocusState private var editingLabel: Bool
     var body: some View {
         NavigationStack {
             Form {
                 Section("Picture card") {
-                    TextField("Label", text: $title).accessibilityIdentifier("cardTitle")
+                    TextField("Label", text: $title).accessibilityIdentifier("cardTitle").focused($editingLabel).onSubmit { editingLabel = false }
                     TextField("Words to speak (optional)", text: $spokenText)
                     Text("Leave words to speak blank to say the label.").font(.caption).foregroundStyle(.secondary)
                     Toggle("Favorite", isOn: $favorite)
                 }
                 Section {
                     HStack(spacing: 16) {
-                        Picture(data: photo, emoji: emoji)
+                        Picture(data: photo, emoji: emoji, libraryID: libraryID)
                             .frame(width: 84, height: 84)
                             .background(Color.sophiaCanvas, in: RoundedRectangle(cornerRadius: 16)).clipped()
                             .accessibilityIdentifier("selectedCardPicture")
                         VStack(alignment: .leading, spacing: 5) {
-                            Text(photo != nil ? "Your photo" : PictureLibrary.picture(for: emoji)?.name ?? "Custom symbol")
+                            Text(photo != nil ? "Your photo" : PictureLibrary.picture(for: libraryID ?? emoji)?.name ?? "Custom symbol")
                                 .font(.headline).accessibilityIdentifier("selectedPictureName")
                             Text("Changing the label won’t replace your chosen picture.")
                                 .font(.caption).foregroundStyle(.secondary)
                         }
                     }
+                    Button("Browse picture library", systemImage: "photo.on.rectangle.angled") { showLibrary = true }
+                        .accessibilityIdentifier("browsePictureLibrary")
                     if !title.trimmed.isEmpty {
                         let suggestions = Array(PictureLibrary.search(title).prefix(6))
                         if !suggestions.isEmpty {
                             Text("Suggested pictures").font(.subheadline.weight(.semibold))
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 95, maximum: 140), spacing: 8)], spacing: 8) {
                                 ForEach(suggestions) { picture in
-                                    LibraryPictureButton(picture: picture, selected: photo == nil && emoji == picture.emoji) {
+                                    LibraryPictureButton(picture: picture, selected: photo == nil && (libraryID ?? emoji) == picture.id) {
                                         choose(picture)
                                     }
                                 }
@@ -192,11 +196,9 @@ struct CardEditor: View {
                                 .font(.caption).foregroundStyle(.secondary)
                         }
                     }
-                    Button("Browse picture library", systemImage: "photo.on.rectangle.angled") { showLibrary = true }
-                        .accessibilityIdentifier("browsePictureLibrary")
                     PhotoField(data: $photo)
                     DisclosureGroup("Use another emoji") {
-                        TextField("Custom emoji", text: $emoji)
+                        TextField("Custom emoji", text: Binding(get: { emoji }, set: { emoji = $0; libraryID = nil }))
                         Text("Your photo takes priority. Remove it to use the symbol instead.")
                             .font(.caption).foregroundStyle(.secondary)
                     }
@@ -206,15 +208,21 @@ struct CardEditor: View {
                     Text("Pictures are included on the iPad and work offline. Suggestions never change the words the card speaks.")
                 }
                 if let error { Text(error).foregroundStyle(.red) }
-            }.navigationTitle(card == nil ? "New word" : "Edit word")
+            }.accessibilityIdentifier("cardEditorForm")
+                .scrollDismissesKeyboard(.interactively)
+                .navigationTitle(card == nil ? "New word" : "Edit word")
                 .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done typing") { editingLabel = false }
+                    }
                     ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save") {
                             let item = card ?? CommunicationCard(title: title.trimmed, position: (category.sortedCards.map(\.position).max() ?? -1) + 1, category: category)
                             if card == nil { context.insert(item) }
                             item.title = title.trimmed; item.spokenText = spokenText.trimmed
-                            item.emoji = String(emoji.prefix(2)); item.photo = photo; item.isFavorite = favorite
+                            item.libraryID = libraryID; item.emoji = String(emoji.prefix(2)); item.photo = photo; item.isFavorite = favorite
                             do { try context.save(); dismiss() }
                             catch { context.rollback(); self.error = "Couldn’t save this word." }
                         }.disabled(title.trimmed.isEmpty || title.trimmed.count > 60 || spokenText.count > 200)
@@ -222,14 +230,16 @@ struct CardEditor: View {
                     }
                 }
         }.sheet(isPresented: $showLibrary) {
-            PictureLibraryView(initialQuery: title.trimmed, selectedSymbol: photo == nil ? emoji : "", onSelect: choose)
+            PictureLibraryView(initialQuery: title.trimmed, selectedSymbol: photo == nil ? (libraryID ?? emoji) : "", onSelect: choose)
         }.onAppear {
             title = card?.title ?? ""; spokenText = card?.spokenText ?? ""
-            emoji = card?.emoji ?? "💬"; favorite = card?.isFavorite ?? false; photo = card?.photo
+            emoji = card?.emoji ?? "💬"; libraryID = card?.libraryID; favorite = card?.isFavorite ?? false; photo = card?.photo
         }
     }
     private func choose(_ picture: LibraryPicture) {
+        editingLabel = false
         emoji = picture.emoji
+        libraryID = picture.sourceID
         photo = nil
     }
 }

@@ -19,6 +19,10 @@ for folder,ext,typ in [('Sources','*.swift','sourcecode.swift'),('Tests','*.swif
   if path.is_file() and not path.name.endswith('.local.xcconfig'):
    f=ref(str(path.relative_to(root)),path.name,typ); files[str(path.relative_to(root))]=f;ids.append(f)
  groups.append(add(folder,'PBXGroup',f'children = {arr(ids)}; path = {q(folder)}; sourceTree = "<group>";'))
+libraryFolder=ref('pictureFolder','Resources/Pictures','folder')
+licenseFile=ref('mulberryLicense','Resources/Mulberry-LICENSE.txt','text')
+attributionFile=ref('mulberryAttribution','Resources/Mulberry-ATTRIBUTION.txt','text')
+groups.extend([libraryFolder,licenseFile,attributionFile])
 assets=ref('assets','Assets.xcassets','folder.assetcatalog')
 groups.append(assets)
 products=[]
@@ -33,7 +37,7 @@ for key,folder,name,productType in [('app','Sources','SophiaAAC','application'),
   if path.startswith(folder+'/'): builds.append(add('build'+path,'PBXBuildFile',f'fileRef = {f};'))
  sources=add(key+'sources','PBXSourcesBuildPhase',f'buildActionMask = 2147483647; files = {arr(builds)}; runOnlyForDeploymentPostprocessing = 0;')
  resources=[]
- if key=='app': resources=[add('assetBuild','PBXBuildFile',f'fileRef = {assets};'), add('privacyBuild','PBXBuildFile',f'fileRef = {files["Configuration/PrivacyInfo.xcprivacy"]};')]
+ if key=='app': resources=[add('libraryBuild','PBXBuildFile',f'fileRef = {libraryFolder};'),add('licenseBuild','PBXBuildFile',f'fileRef = {licenseFile};'),add('attributionBuild','PBXBuildFile',f'fileRef = {attributionFile};'),add('assetBuild','PBXBuildFile',f'fileRef = {assets};'), add('privacyBuild','PBXBuildFile',f'fileRef = {files["Configuration/PrivacyInfo.xcprivacy"]};')]
  resourcePhase=add(key+'resources','PBXResourcesBuildPhase',f'buildActionMask = 2147483647; files = {arr(resources) if resources else "()"}; runOnlyForDeploymentPostprocessing = 0;')
  frameworkPhase=add(key+'frameworks','PBXFrameworksBuildPhase','buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;')
  ext='app' if key=='app' else 'xctest'

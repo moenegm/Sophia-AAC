@@ -12,7 +12,7 @@ import Observation
         synthesizer.delegate = self
     }
 
-    func speak(_ text: String, rate: Double, language: String) {
+    func speak(_ text: String, rate: Double, language: String, voiceIdentifier: String? = nil) {
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         do {
             let session = AVAudioSession.sharedInstance()
@@ -20,7 +20,7 @@ import Observation
             try session.setActive(true)
             synthesizer.stopSpeaking(at: .immediate)
             let utterance = AVSpeechUtterance(string: text)
-            utterance.voice = AVSpeechSynthesisVoice(language: language)
+            utterance.voice = VoiceOptions.resolve(identifier: voiceIdentifier, language: language)
             utterance.rate = Float(rate)
             lastPhrase = text
             isSpeaking = true

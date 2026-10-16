@@ -49,6 +49,7 @@ import SwiftData
     var title: String = ""
     var spokenText: String = ""
     var emoji: String = "💬"
+    var libraryID: String? = nil
     var position: Int = 0
     var isFavorite: Bool = false
     @Attribute(.externalStorage) var photo: Data?
