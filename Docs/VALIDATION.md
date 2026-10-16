@@ -10,7 +10,8 @@ Validated on 16 October 2026 using Xcode 26.3, Swift 6.2.4, and an iPad Pro 13-i
 - Visual check: bundled starter pictures render independently of simulator emoji font availability. Preview uses fictional sample data.
 - Release guard: confirmed that Release configuration rejects the presence of `legacy/`.
 - Git whitespace checks: passed.
-- Physical iPad installation attempted; the paired device connection dropped. Reconnect over USB and unlock the iPad before retrying. No successful device installation or live iCloud startup is claimed.
+- Signed CloudDebug app installed successfully on the paired iPad Pro 13-inch (M4) after the connection recovered.
+- First launch was denied because the iPad was locked. Unlock the iPad and open Sophia before startup and live iCloud verification. Installation is confirmed; live sync is not.
 
 ## Still requires a hands-on iPad check
 
