@@ -23,6 +23,23 @@ final class SophiaUITests: XCTestCase {
         XCTAssertTrue(app.buttons["word-Apple"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["word-Yes"].exists)
     }
+    func testParentKeypadKeepsQuestionVisibleInPortrait() {
+        let app = launch()
+        XCUIDevice.shared.orientation = .portrait
+        app.buttons["parentSpace"].tap()
+        let question = app.staticTexts.matching(NSPredicate(format: "label CONTAINS ' + ' AND label CONTAINS ' = ?'")).firstMatch
+        XCTAssertTrue(question.waitForExistence(timeout: 5))
+        XCTAssertTrue(question.isHittable)
+        app.buttons["parent-key-1"].tap()
+        app.buttons["parent-key-2"].tap()
+        XCTAssertEqual(app.staticTexts["parentAnswer"].value as? String, "12")
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
+        XCTAssertTrue(question.isHittable)
+        app.buttons["parent-key-Delete"].tap()
+        XCTAssertEqual(app.staticTexts["parentAnswer"].value as? String, "1")
+        app.buttons["parent-key-Clear"].tap()
+        XCTAssertEqual(app.staticTexts["parentAnswer"].value as? String ?? "", "")
+    }
     func testParentGateAndCreateWord() {
         let app = launch()
         app.buttons["parentSpace"].tap()
@@ -30,13 +47,13 @@ final class SophiaUITests: XCTestCase {
         XCTAssertTrue(question.waitForExistence(timeout: 5))
         let numbers = question.label.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap(Int.init)
         XCTAssertEqual(numbers.count, 2)
-        let answer = app.textFields["parentAnswer"]
-        answer.tap(); answer.typeText(String(numbers.reduce(0,+)))
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
+        for digit in String(numbers.reduce(0,+)) { app.buttons["parent-key-\(digit)"].tap() }
+        XCTAssertTrue(question.isHittable)
         app.buttons["unlockParent"].tap()
         XCTAssertTrue(app.navigationBars["Parent space"].waitForExistence(timeout: 5))
         app.buttons["chooseVoice"].tap()
         XCTAssertTrue(app.navigationBars["Choose a voice"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["System default"].exists)
         let voice = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'select-voice-'")).firstMatch
         if voice.exists {
             let voiceID = voice.identifier

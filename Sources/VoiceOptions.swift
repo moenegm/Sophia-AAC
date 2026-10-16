@@ -3,10 +3,14 @@ import AVFoundation
 
 @MainActor enum VoiceOptions {
     static func available(for language: String) -> [AVSpeechSynthesisVoice] {
-        AVSpeechSynthesisVoice.speechVoices().filter { $0.language == language }
+        AVSpeechSynthesisVoice.speechVoices().filter { $0.language == language && isPreferredName($0.name) }
             .sorted { a, b in
                 a.quality.rawValue == b.quality.rawValue ? a.name < b.name : a.quality.rawValue > b.quality.rawValue
             }
+    }
+    static func isPreferredName(_ name: String) -> Bool {
+        let base = name.lowercased().split(separator: " ").first.map(String.init) ?? ""
+        return ["samantha", "eddy"].contains(base)
     }
     static func quality(_ voice: AVSpeechSynthesisVoice) -> String {
         switch voice.quality {
@@ -16,10 +20,11 @@ import AVFoundation
         }
     }
     static func resolve(identifier: String?, language: String) -> AVSpeechSynthesisVoice? {
-        if let identifier, !identifier.isEmpty, let voice = AVSpeechSynthesisVoice(identifier: identifier), voice.language == language {
+        if let identifier, !identifier.isEmpty, let voice = AVSpeechSynthesisVoice(identifier: identifier), voice.language == language, isPreferredName(voice.name) {
             return voice
         }
-        return AVSpeechSynthesisVoice(language: language)
+        let choices = available(for: language)
+        return choices.first(where: { $0.name.lowercased().hasPrefix("samantha") }) ?? choices.first ?? AVSpeechSynthesisVoice(language: language)
     }
 }
 
@@ -32,12 +37,8 @@ struct VoicePicker: View {
     var body: some View {
         List {
             Section {
-                Button { identifier = "" } label: {
-                    HStack {
-                        Text("System default")
-                        Spacer()
-                        if identifier.isEmpty { Image(systemName: "checkmark") }
-                    }
+                if voices.isEmpty {
+                    Text("Samantha and Eddy aren’t available for this language on this iPad. Sophia will use the system voice. See the download instructions below.")
                 }
                 ForEach(voices, id: \.identifier) { voice in
                     HStack(spacing: 14) {
@@ -58,16 +59,16 @@ struct VoicePicker: View {
                         .buttonStyle(.borderless).accessibilityLabel("Preview \(voice.name), \(VoiceOptions.quality(voice))")
                     }
                 }
-            } header: { Text("Available on this iPad") } footer: {
-                Text("The selected voice is used for all cards and sentences on this iPad. If it is removed, Sophia falls back to the system voice for this language.")
+            } header: { Text("Samantha and Eddy") } footer: {
+                Text("The selected voice is used for all cards and sentences on this iPad. If it is removed, Sophia uses Samantha when available, then Eddy, then the system voice for this language.")
             }
             Section("More natural voices") {
-                Text("For more choices, download Enhanced or Premium voices in iPad Settings → Accessibility → Read & Speak (called Spoken Content on some versions) → Voices. Return here after the download finishes.")
+                Text("Download available Samantha or Eddy voice qualities in iPad Settings → Accessibility → Read & Speak (called Spoken Content on some versions) → Voices. Return here after the download finishes.")
                 Button("Refresh voices", systemImage: "arrow.clockwise") { refresh() }
-                Text("Only voices Apple makes available to apps are listed. Downloaded voices can be used offline; availability varies by language and iPadOS version.").font(.caption).foregroundStyle(.secondary)
+                Text("Sophia lists Samantha and Eddy when Apple makes them available for the selected language. Siri voices cannot be used by this app. Downloaded voices can be used offline; availability varies by language and iPadOS version.").font(.caption).foregroundStyle(.secondary)
             }
             if !identifier.isEmpty && !voices.contains(where: { $0.identifier == identifier }) {
-                Text("Your selected voice is unavailable. Sophia is using the system default until it is available again.").foregroundStyle(.secondary)
+                Text("Your selected voice is unavailable. Sophia is using an available fallback voice.").foregroundStyle(.secondary)
             }
         }.navigationTitle("Choose a voice")
             .task { refresh() }

@@ -84,7 +84,11 @@ import UIKit
         XCTAssertEqual(voice?.language, "en-US")
     }
     func testAvailableVoicesStayWithinLanguageAndResolveByIdentifier() {
+        XCTAssertTrue(VoiceOptions.isPreferredName("Samantha (Enhanced)"))
+        XCTAssertTrue(VoiceOptions.isPreferredName("Eddy"))
+        XCTAssertFalse(VoiceOptions.isPreferredName("Fred"))
         for voice in VoiceOptions.available(for: "en-US") {
+            XCTAssertTrue(VoiceOptions.isPreferredName(voice.name))
             XCTAssertEqual(voice.language, "en-US")
             XCTAssertEqual(VoiceOptions.resolve(identifier: voice.identifier, language: "en-US")?.identifier, voice.identifier)
             XCTAssertFalse(VoiceOptions.quality(voice).isEmpty)

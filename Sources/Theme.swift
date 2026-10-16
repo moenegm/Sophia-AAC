@@ -45,7 +45,6 @@ struct ParentGate: View {
     let onUnlock: () -> Void
     @State private var answer = ""
     @State private var incorrect = false
-    @FocusState private var answerFocused: Bool
     @State private var a = Int.random(in: 5...9)
     @State private var b = Int.random(in: 3...8)
     var body: some View {
@@ -55,8 +54,23 @@ struct ParentGate: View {
                     Label("For parents and caregivers", systemImage: "lock.fill").font(.headline)
                     Text("Solve this to open editing and settings.")
                     Text("\(a) + \(b) = ?").font(.largeTitle.bold())
-                    TextField("Answer", text: $answer).keyboardType(.numberPad)
-                        .accessibilityIdentifier("parentAnswer").focused($answerFocused)
+                    Text(answer.isEmpty ? "Enter answer" : answer)
+                        .font(.title2.monospacedDigit()).frame(maxWidth: .infinity, minHeight: 44)
+                        .accessibilityLabel("Answer").accessibilityValue(answer)
+                        .accessibilityIdentifier("parentAnswer")
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 10) {
+                        ForEach(["1", "2", "3", "4", "5", "6", "7", "8", "9", "Clear", "0", "Delete"], id: \.self) { key in
+                            Button {
+                                incorrect = false
+                                if key == "Clear" { answer = "" }
+                                else if key == "Delete" { if !answer.isEmpty { answer.removeLast() } }
+                                else if answer.count < 3 { answer += key }
+                            } label: {
+                                Text(key).font(.title3.weight(.semibold))
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                            }.buttonStyle(.bordered).accessibilityIdentifier("parent-key-\(key)")
+                        }
+                    }
                     if incorrect { Text("Try that again.").foregroundStyle(.red) }
                 }
             }
@@ -65,7 +79,7 @@ struct ParentGate: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Open") {
-                        if Int(answer) == a + b { answerFocused = false; onUnlock() }
+                        if Int(answer) == a + b { onUnlock() }
                         else { incorrect = true }
                     }.accessibilityIdentifier("unlockParent")
                 }

@@ -41,3 +41,11 @@ The Apple account and signing setup work on this Mac; no additional account sign
 - Signed CloudDebug device build passed. The updated app installed over the existing app and launched successfully on the paired iPad Pro 13-inch (M4).
 - Real audible voice quality, downloading Enhanced/Premium voices, and cross-device CloudKit sync still require hands-on checks. Simulator voice services emitted fallback warnings; automated voice tests do not establish audio quality.
 - Both UI tests passed: board communication controls, parent gate, saved voice selection, explicit picture suggestions, full-library chicken-wings search/selection, unchanged card text, and saving the card. Total: 16 passing tests.
+
+## Parent keypad and curated voices — 16 October 2026
+
+- Replaced the parent answer text field with an in-app keypad so the floating iPad number keyboard cannot cover the arithmetic question. Includes clear and delete controls.
+- Limited selectable voices to installed Samantha and Eddy variants matching the chosen language. Removed the general system-default choice; automatic fallback prefers Samantha, then Eddy, then a language-matched system voice when neither is available. Previously selected other voices no longer override this preference.
+- Kept voice download instructions and added an explanation that Siri voices are unavailable to this speech API. Reference: https://developer.apple.com/videos/play/wwdc2020/10022/ .
+- All 14 unit tests and both existing UI flows passed after these changes. Signed CloudDebug build passed; the update installed and launched on the paired iPad.
+- Additional portrait UI regression passed: the question remains hittable, no system keyboard appears, and keypad entry, delete, and clear work. Total: 17 passing tests across the full suite and targeted portrait run.
