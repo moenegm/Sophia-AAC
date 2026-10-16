@@ -55,3 +55,10 @@ The Apple account and signing setup work on this Mac; no additional account sign
 - Replaced the Samantha/Eddy name restriction with an exclusion of Eloquence provider identifiers and Apple’s `isNoveltyVoice` trait. Other app-available voices matching the selected language remain selectable, including future downloads.
 - Preserved download instructions, previews, selection persistence, and refresh. Existing selections from excluded groups fall back to an allowed voice.
 - Three focused voice tests passed: excluded groups, complete allowed-language enumeration and identifier resolution, and unavailable-selection fallback. Signed CloudDebug device build passed and installed successfully on the paired iPad.
+
+## Optional sentence builder — 16 October 2026
+
+- Added a per-profile Show sentence builder switch with two explanatory sentences beneath it in Parent space. It starts enabled to preserve existing behavior.
+- Off hides the strip and prevents word collection while immediate card speech remains unchanged. Changing the setting clears the unfinished sentence. The preference is stored with the profile and included as an optional backup field; old backups restore enabled.
+- Existing full suite passed (15 unit tests and three UI tests). Two added regressions passed separately: per-child backup/isolation/legacy restoration, and toggling off through the switch then tapping a word without showing the strip. The UI test targets the switch control because the row’s center tap did not change its value.
+- Signed CloudDebug device build passed; update installed over the existing app and launched on the paired iPad. Real cross-device propagation of the new setting remains a hands-on CloudKit check.

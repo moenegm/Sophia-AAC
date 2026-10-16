@@ -40,6 +40,25 @@ final class SophiaUITests: XCTestCase {
         app.buttons["parent-key-Clear"].tap()
         XCTAssertEqual(app.staticTexts["parentAnswer"].value as? String ?? "", "")
     }
+    func testSentenceBuilderCanBeHiddenPerChild() {
+        let app = launch()
+        app.buttons["parentSpace"].tap()
+        let question = app.staticTexts.matching(NSPredicate(format: "label CONTAINS ' + ' AND label CONTAINS ' = ?'")).firstMatch
+        XCTAssertTrue(question.waitForExistence(timeout: 5))
+        let numbers = question.label.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap(Int.init)
+        for digit in String(numbers.reduce(0,+)) { app.buttons["parent-key-\(digit)"].tap() }
+        app.buttons["unlockParent"].tap()
+        let toggle = app.switches["sentenceBuilder-Alex"]
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(toggle.value as? String, "1")
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
+        XCTAssertTrue(NSPredicate(format: "value == '0'").evaluate(with: toggle))
+        app.buttons["Done"].tap()
+        XCTAssertTrue(app.buttons["word-Yes"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["speakSentence"].exists)
+        app.buttons["word-Yes"].tap()
+        XCTAssertFalse(app.buttons["speakSentence"].exists)
+    }
     func testParentGateAndCreateWord() {
         let app = launch()
         app.buttons["parentSpace"].tap()

@@ -6,6 +6,7 @@ struct BoardBackup: Codable {
     var version = 1
     var name: String
     var photo: Data?
+    var sentenceBuilderEnabled: Bool?
     var categories: [Category]
     struct Category: Codable {
         var name: String
@@ -24,6 +25,7 @@ struct BoardBackup: Codable {
     }
     @MainActor init(profile: ChildProfile) {
         name = profile.name; photo = profile.photo
+        sentenceBuilderEnabled = profile.sentenceBuilderEnabled
         categories = profile.sortedCategories.map { category in
             Category(name: category.name, symbol: category.symbol, colorIndex: category.colorIndex,
                      photo: category.photo, cards: category.sortedCards.map {
@@ -43,6 +45,7 @@ struct BoardBackup: Codable {
         try validate()
         // Restore as a new profile. Never overwrite an existing child's board.
         let child = ChildProfile(name: String(name.prefix(49)) + " (restored)", photo: photo)
+        child.sentenceBuilderEnabled = sentenceBuilderEnabled ?? true
         context.insert(child)
         for (position, category) in categories.enumerated() {
             let group = BoardCategory(name: category.name, symbol: category.symbol, colorIndex: category.colorIndex,

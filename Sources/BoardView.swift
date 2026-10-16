@@ -76,6 +76,7 @@ struct BoardView: View {
         .alert("Audio", isPresented: Binding(get: { speech.error != nil }, set: { if !$0 { speech.error = nil } })) {
             Button("OK") { speech.error = nil }
         } message: { Text(speech.error ?? "") }
+        .onChange(of: profile?.sentenceBuilderEnabled) { _, _ in phrase = [] }
         .onChange(of: profile?.id) { _, _ in resetBoard() }
         .onChange(of: profile?.cards.map(\.id)) { _, _ in
             // Never retain phrases from cards removed by a parent or another iCloud device.
@@ -204,7 +205,7 @@ struct BoardView: View {
                     }.padding(.horizontal, 28).padding(.bottom, 24)
                 }.accessibilityIdentifier("wordGrid")
             }
-            phraseBar
+            if profile.sentenceBuilderEnabled { phraseBar }
         }
         .foregroundStyle(Color.sophiaInk).background(Color.sophiaCanvas)
         .toolbar { ToolbarItem(placement: .topBarTrailing) {
@@ -214,7 +215,7 @@ struct BoardView: View {
 
     private func wordCard(_ card: CommunicationCard) -> some View {
         Button {
-            if phrase.count < 12 { phrase.append(PhrasePart(text: card.phrase, label: card.title)) }
+            if profile?.sentenceBuilderEnabled == true && phrase.count < 12 { phrase.append(PhrasePart(text: card.phrase, label: card.title)) }
             highlighted = card.id
             speech.speak(card.phrase, rate: speechRate, language: speechLanguage, voiceIdentifier: speechVoiceIdentifier)
         } label: {

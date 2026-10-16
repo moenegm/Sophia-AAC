@@ -46,6 +46,7 @@ struct ParentView: View {
                             .accessibilityLabel("Options for \(profile.name)")
                         }
                         NavigationLink("Edit \(profile.name)’s words") { CategoryManager(profile: profile) }
+                        sentenceSettings(profile)
                     }
                     Button("Add a child profile", systemImage: "plus") { newProfile = true }
                         .accessibilityIdentifier("addProfile")
@@ -123,6 +124,19 @@ struct ParentView: View {
             .onChange(of: speechLanguage) { _, _ in speechVoiceIdentifier = ""; speech.stop() }
             .onDisappear { speech.stop() }
         }.tint(.sophiaTeal)
+    }
+    private func sentenceSettings(_ profile: ChildProfile) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Toggle("Show sentence builder", isOn: Binding(
+                get: { profile.sentenceBuilderEnabled },
+                set: { enabled in
+                    profile.sentenceBuilderEnabled = enabled
+                    do { try context.save() } catch { self.error = "Couldn’t save this setting. Please try again." }
+                }))
+                .accessibilityIdentifier("sentenceBuilder-\(profile.name)")
+            Text("For \(profile.name), collect tapped words in ‘My sentence’ and use Speak to play them together. When off, each card still speaks immediately, without collecting words at the bottom.")
+                .font(.caption).foregroundStyle(.secondary)
+        }.padding(.vertical, 4)
     }
     private var voiceSettings: some View {
         Section("Voice") {

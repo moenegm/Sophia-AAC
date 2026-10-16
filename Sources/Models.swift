@@ -6,6 +6,7 @@ import SwiftData
     var id: UUID = UUID()
     var name: String = ""
     var createdAt: Date = Date()
+    var sentenceBuilderEnabled: Bool = true
     @Attribute(.externalStorage) var photo: Data?
     @Relationship(deleteRule: .cascade, inverse: \BoardCategory.profile)
     var categories: [BoardCategory]?

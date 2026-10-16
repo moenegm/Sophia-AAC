@@ -18,7 +18,7 @@ See [validation results and remaining checks](Docs/VALIDATION.md).
 
 - Create separate child profiles with their own photos and communication boards.
 - Organize large picture cards into categories and favorites.
-- Tap a card to speak, or collect words in a sentence strip with Speak, Undo, Clear, and Stop voice controls.
+- Tap a card to speak, or collect words in a sentence strip with Speak, Undo, Clear, and Stop voice controls. Parents can turn the sentence builder on or off separately for each child.
 - Start with 27 words across Everyday, Food, Drinks, Feelings, and Activities, then personalize them.
 - Choose from 3,557 bundled pictures, including the Mulberry AAC symbol collection and a dedicated chicken-wings illustration. Enter a card label for matching suggestions, or search the full library by name or tag. Parents confirm the picture; suggestions never replace an image or rewrite spoken words automatically.
 - Keep a personal photo instead when it better represents the message. Library pictures work offline and are stored once in the app, not copied into every card.

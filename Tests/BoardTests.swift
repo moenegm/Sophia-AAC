@@ -18,6 +18,21 @@ import SwiftData
         XCTAssertTrue(other.cards.isEmpty)
         XCTAssertTrue(child.cards.allSatisfy { $0.category?.profile?.id == child.id })
     }
+    func testSentencePreferenceBackupAndProfileIsolation() throws {
+        let db = try ModelContainer(for: ChildProfile.self, BoardCategory.self, CommunicationCard.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none))
+        let first = ChildProfile(name: "First"), second = ChildProfile(name: "Second")
+        db.mainContext.insert(first); db.mainContext.insert(second)
+        first.sentenceBuilderEnabled = false
+        let data = try JSONEncoder().encode(BoardBackup(profile: first))
+        let copy = try JSONDecoder().decode(BoardBackup.self, from: data).restore(in: db.mainContext)
+        XCTAssertFalse(copy.sentenceBuilderEnabled)
+        XCTAssertTrue(second.sentenceBuilderEnabled)
+        var legacy = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        legacy.removeValue(forKey: "sentenceBuilderEnabled")
+        let old = try JSONDecoder().decode(BoardBackup.self, from: JSONSerialization.data(withJSONObject: legacy))
+        XCTAssertTrue(try old.restore(in: db.mainContext).sentenceBuilderEnabled)
+    }
     func testSpeechFallsBackToLabel() {
         let card = CommunicationCard(title: "Water", spokenText: "  ")
         XCTAssertEqual(card.phrase, "Water")

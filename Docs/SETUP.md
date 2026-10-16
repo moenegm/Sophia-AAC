@@ -61,3 +61,7 @@ Download additional voices in Settings → Accessibility → Read & Speak (Spoke
 `Scripts/import-symbols.py SOURCE_CHECKOUT REPOSITORY_ROOT` renders the Mulberry collection using `rsvg-convert` and adds the project’s chicken-wings SVG. The imported revision is `9cbab9f400c5de44e2bc58839cca07294aadb086` from https://github.com/mulberrysymbols/mulberry-symbols. Preserve the license, attribution, upstream symbol IDs, and custom SVG when rebuilding.
 
 The parent check uses its own number buttons so the system’s floating number keyboard cannot cover the question. The voice picker lists installed voices Apple exposes to apps for the selected language, excluding Eloquence and Novelty. New downloads from other groups can appear after Refresh voices. Remove unwanted downloads in iPad Settings; Sophia cannot delete system voices. Siri voices are not exposed through Apple’s AVSpeechSynthesizer API.
+
+### Optional sentence builder
+
+In Parent space, each profile has a **Show sentence builder** switch with a short description. It starts enabled to preserve existing boards. When disabled, the bottom strip is hidden and taps do not accumulate words; immediate card speech is unchanged. The preference belongs to the profile, syncs with its other SwiftData settings in the iCloud build, and is included in exported backups. Older backups without this optional field restore with the sentence builder enabled. Changing the setting clears the current unfinished sentence.
