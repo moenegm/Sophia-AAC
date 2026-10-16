@@ -1,35 +1,69 @@
 # Sophia-AAC
 
-An iPad-only picture communication app for autistic children, rebuilt natively with SwiftUI. Parents create child profiles, choose photos, and organize the words that matter. Children tap a picture to speak through Apple's built-in speech synthesis.
+<img src="Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Sophia app icon" width="80" height="80">
 
-![Sophia iPad preview](Docs/iPad-preview.png)
+**An iPad picture communication app for autistic children.** Parents create personal boards with familiar photos and everyday words. Children tap a picture to speak using Apple's built-in voices.
 
-## Included
+Sophia is being rebuilt in SwiftUI for **iPad only**, with offline storage and private iCloud sync through the parent's Apple Account. No separate Sophia account or Rails backend is required.
 
-- Large picture cards, categories, favorites, and a sentence strip with Speak, Undo, Clear, and Stop voice.
-- Separate parent mode for profiles, photos, categories, card editing, and ordering.
-- Optional starter boards with 27 words across five categories.
-- Offline SwiftData persistence, plus a separate iCloud build configuration for private CloudKit sync through the parent's Apple Account.
-- JSON backup export/import; restoring creates a new profile.
-- English and Arabic voice choices and adjustable speaking speed. Card content is edited manually, not automatically translated.
+![Sophia’s communication board on an iPad, using fictional sample content](Docs/iPad-preview.png)
 
-No Rails backend, Sophia account, VoiceRSS key, third-party packages, ads, or analytics are required by the native app.
+## Development status
 
-## Open the project
+The native app builds, passes six data tests and two UI tests, and is installed and launching on a development iPad. Hands-on testing of speech, personal boards, and cross-device iCloud sync is underway. **There is no public App Store or TestFlight release yet.**
 
-Open **Sophia-AAC.xcodeproj**, choose **Sophia-AAC**, select an iPad simulator, and Run. Requires iPadOS 17+. `--demo` loads a temporary sample board for previews/tests.
+See [validation results and remaining checks](Docs/VALIDATION.md).
 
-The regular scheme is local-only. **Sophia-AAC iCloud** enables CloudKit after the Apple team and container are configured. Cross-device sync is not considered verified until tested on signed devices.
+## What you can do
 
-See [setup and testing](Docs/SETUP.md) and the [release checklist](Docs/RELEASE.md).
+- Create separate child profiles with their own photos and communication boards.
+- Organize large picture cards into categories and favorites.
+- Tap a card to speak, or collect words in a sentence strip with Speak, Undo, Clear, and Stop voice controls.
+- Start with 27 words across Everyday, Food, Drinks, Feelings, and Activities, then personalize them.
+- Use a separate parent space to edit profiles, categories, pictures, labels, spoken phrases, favorites, and ordering.
+- Choose English or Arabic speech voices and adjust speaking speed. Changing a voice does not translate card content.
+- Save boards offline, with a separate build configuration for private CloudKit sync across iPads using the same Apple Account.
+- Export a separate JSON backup and restore it as a new profile without overwriting an existing board.
 
-## Repository layout
+Starter content is optional and customizable. The parent check discourages accidental editing; it is not a password lock. Download any required voices to the iPad before relying on offline speech.
 
-- `Sources/` — native SwiftUI app, models, speech, editors, and backups.
-- `Assets.xcassets/` — native app icon.
-- `Configuration/` — local/iCloud build configurations, entitlements, and privacy manifest.
-- `Tests/`, `UITests/` — data and iPad interaction tests.
-- `Scripts/` — project generation and release guard.
-- `legacy/rails/` — temporary copy of the original web app for reference only.
+## Open and run
 
-**Remove `legacy/` before going live.** Release builds fail while that directory exists. The legacy code is never a source/resource of the iPad target; removing it from a release does not erase Git history.
+Requires **iPadOS 17 or later** and Xcode with the iOS SDK. The target supports iPad, not iPhone or Mac Catalyst.
+
+1. Clone the repository and open **Sophia-AAC.xcodeproj**.
+2. Choose the **Sophia-AAC** scheme and an iPad simulator, then Run. This scheme saves locally without iCloud configuration.
+3. Create a profile and leave **Include starter words** on to try the sample board.
+4. For an in-memory sample preview, add `--demo` under Edit Scheme → Run → Arguments. Remove it for normal use; demo changes reset on launch and never sync.
+
+For private iCloud sync, choose **Sophia-AAC iCloud**, configure your own Apple Developer team and CloudKit container, then run on a signed-in iPad. Copy `Configuration/Signing.example.xcconfig` to the ignored `Configuration/Signing.local.xcconfig` for your identifiers. No passwords, certificates, or speech API keys belong in the repository.
+
+Full instructions: [setup, signing, iCloud, backups, and tests](Docs/SETUP.md).
+
+## Storage and privacy
+
+The native app uses SwiftData on the iPad and, in the iCloud build, the parent's private CloudKit database. There is no Sophia login, third-party speech service, advertising, or analytics SDK.
+
+CloudKit sync is eventual and carries edits and deletions between devices; it is not an independent backup. Export a separate backup when needed. Exported files include profile names and photos, so keep them private.
+
+## Built with
+
+SwiftUI · SwiftData · CloudKit · AVFoundation · PhotosUI. No third-party packages are required.
+
+## Source layout
+
+| Path | Purpose |
+| --- | --- |
+| `Sources/` | Native app, models, speech, parent editors, and backups |
+| `Assets.xcassets/` | App icon and bundled starter pictures |
+| `Configuration/` | Local/iCloud build settings, entitlements, and privacy manifest |
+| `Tests/`, `UITests/` | Data and iPad interaction tests |
+| `Scripts/` | Project/asset generation and release guard |
+| `Docs/` | Setup, validation, release checklist, and preview |
+| `legacy/rails/` | Temporary reference copy of the original web app |
+
+## Before release
+
+**Remove the entire `legacy/` directory before going live.** Release builds fail while it exists. Rails files are never included in the iPad target, and no existing-user migration is planned. Removing legacy files from the current tree does not erase Git history.
+
+Finish device and iCloud verification, CloudKit production schema setup, and distribution preparation using the [release checklist](Docs/RELEASE.md).
